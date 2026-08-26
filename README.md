@@ -2,18 +2,20 @@
 
 ## Overview
 
-This repository contains the BPMN process models created for Workflow Automation Engineering. The processes are modeled using **Camunda Modeler** and demonstrate the use of basic BPMN building blocks such as Start Events, Tasks, Exclusive Gateways, alternative process paths, and End Events.
+This repository contains BPMN and DMN process models created using **Camunda Modeler**. The workflows demonstrate BPMN 2.0 concepts such as Start Events, Tasks, Exclusive Gateways, alternative process paths, End Events, Business Rule Tasks, and DMN-based decision logic.
 
-The assignment contains three business process scenarios:
+The repository currently contains the following workflow scenarios:
 
 1. Employee Leave Approval
 2. Online Purchase Order Processing
 3. IT Service Request
+4. Loan Risk Routing
 
 ## Tools Used
 
 - **Camunda Modeler**
 - **BPMN 2.0**
+- **DMN**
 
 ---
 
@@ -33,7 +35,7 @@ If there is insufficient leave balance, the employee receives an insufficient-ba
 
 ### BPMN Model
 
-[View Employee Leave Approval BPMN](scenario-1/employee-leave-approval.bpmn)
+[View Employee Leave Approval BPMN](employee-leave-approval.bpmn)
 
 ---
 
@@ -53,7 +55,7 @@ For successful payment, the system confirms the order, prepares the product for 
 
 ### BPMN Model
 
-[View Online Purchase Order Processing BPMN](scenario-2/online-purchase-order-processing.bpmn)
+[View Online Purchase Order Processing BPMN](online-purchase-order-processing.bpmn)
 
 ---
 
@@ -75,7 +77,50 @@ After either path, the help desk updates the request status and the employee rec
 
 ### BPMN Model
 
-[View IT Service Request BPMN](scenario-3/it-service-request.bpmn)
+[View IT Service Request BPMN](it-service-request.bpmn)
+
+---
+
+## Scenario 4: Loan Risk Routing
+
+### Scenario Description
+
+This workflow models an end-to-end loan application risk-routing process. The application is evaluated using a DMN decision table based on the applicant's credit score and requested loan amount.
+
+### Process Logic
+
+The process starts when a customer submits a loan application containing the applicant age, credit score, and loan amount.
+
+A Business Rule Task invokes the `evaluate-loan-risk` DMN decision. The decision determines the applicant's risk tier and whether manual review is required.
+
+An Exclusive Gateway then routes the application based on the decision result:
+
+- **LOW** risk → Auto-Approve and Disburse
+- **MEDIUM** risk or manual review required → Underwriter Review
+- **HIGH** risk without manual review → Auto-Reject Notification
+
+Each path ends after the corresponding action is completed.
+
+### BPMN Model
+
+[View Loan Risk Routing BPMN](loan-risk-routing/loan-risk-routing.bpmn)
+
+### DMN Decision
+
+[View Loan Risk Evaluation DMN](loan-risk-routing/evaluate-loan-risk.dmn)
+
+### Decision Rules
+
+The DMN decision uses the following rules:
+
+| Credit Score | Loan Amount | Risk Tier | Manual Review |
+|---|---|---|---|
+| >= 750 | <= 50000 | LOW | false |
+| >= 750 | > 50000 | MEDIUM | true |
+| 600–749 | Any | MEDIUM | true |
+| < 600 | Any | HIGH | false |
+
+The decision uses the **Unique (U)** hit policy.
 
 ---
 
@@ -86,11 +131,10 @@ workflow-automation-engineering/
 │
 ├── README.md
 │
-├── scenario-1/
-│   └── employee-leave-approval.bpmn
+├── employee-leave-approval.bpmn
+├── online-purchase-order-processing.bpmn
+├── it-service-request.bpmn
 │
-├── scenario-2/
-│   └── online-purchase-order-processing.bpmn
-│
-└── scenario-3/
-    └── it-service-request.bpmn
+└── loan-risk-routing/
+    ├── loan-risk-routing.bpmn
+    └── evaluate-loan-risk.dmn
