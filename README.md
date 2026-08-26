@@ -1,15 +1,9 @@
+cat > README.md <<'EOF'
 # Workflow Automation Engineering
 
 ## Overview
 
-This repository contains BPMN and DMN process models created using **Camunda Modeler**. The workflows demonstrate BPMN 2.0 concepts such as Start Events, Tasks, Exclusive Gateways, alternative process paths, End Events, Business Rule Tasks, and DMN-based decision logic.
-
-The repository currently contains the following workflow scenarios:
-
-1. Employee Leave Approval
-2. Online Purchase Order Processing
-3. IT Service Request
-4. Loan Risk Routing
+This repository contains BPMN and DMN process models created using **Camunda Modeler**. The workflows demonstrate BPMN process modeling, Exclusive Gateways, Business Rule Tasks, DMN decision tables, User Tasks, Service Tasks, and decision-based process routing.
 
 ## Tools Used
 
@@ -19,7 +13,7 @@ The repository currently contains the following workflow scenarios:
 
 ---
 
-## Scenario 1: Employee Leave Approval
+## Employee Leave Approval
 
 ### Scenario Description
 
@@ -39,7 +33,7 @@ If there is insufficient leave balance, the employee receives an insufficient-ba
 
 ---
 
-## Scenario 2: Online Purchase Order Processing
+## Online Purchase Order Processing
 
 ### Scenario Description
 
@@ -59,7 +53,7 @@ For successful payment, the system confirms the order, prepares the product for 
 
 ---
 
-## Scenario 3: IT Service Request
+## IT Service Request
 
 ### Scenario Description
 
@@ -81,46 +75,73 @@ After either path, the help desk updates the request status and the employee rec
 
 ---
 
-## Scenario 4: Loan Risk Routing
+## Loan Risk Routing
 
 ### Scenario Description
 
-This workflow models an end-to-end loan application risk-routing process. The application is evaluated using a DMN decision table based on the applicant's credit score and requested loan amount.
+This process models an end-to-end loan approval workflow. A Business Rule Task evaluates the loan application using a DMN decision table and determines the applicant's risk tier and whether manual review is required.
 
-### Process Logic
+### BPMN Process
 
-The process starts when a customer submits a loan application containing the applicant age, credit score, and loan amount.
+The process starts when a customer submits a loan application containing applicant age, credit score, and loan amount.
 
-A Business Rule Task invokes the `evaluate-loan-risk` DMN decision. The decision determines the applicant's risk tier and whether manual review is required.
+The Business Rule Task evaluates the application using the `evaluate-loan-risk` DMN decision table. The resulting risk tier is then evaluated by an Exclusive Gateway.
 
-An Exclusive Gateway then routes the application based on the decision result:
+Low-risk applications are automatically approved and disbursed. Medium-risk applications or applications requiring manual review are routed to an underwriter. High-risk applications that do not require manual review are automatically rejected and the customer is notified.
 
-- **LOW** risk → Auto-Approve and Disburse
-- **MEDIUM** risk or manual review required → Underwriter Review
-- **HIGH** risk without manual review → Auto-Reject Notification
+### Models
 
-Each path ends after the corresponding action is completed.
+- [View Loan Risk Routing BPMN](loan-risk-routing/loan-risk-routing.bpmn)
+- [View Loan Risk DMN](loan-risk-routing/evaluate-loan-risk.dmn)
 
-### BPMN Model
+---
 
-[View Loan Risk Routing BPMN](loan-risk-routing/loan-risk-routing.bpmn)
+## Multi-Item Order Discount
 
-### DMN Decision
+### Scenario Description
 
-[View Loan Risk Evaluation DMN](loan-risk-routing/evaluate-loan-risk.dmn)
+This process models discount calculation and fulfillment for customer orders. A Business Rule Task uses a DMN decision table with a Collect Sum hit policy to aggregate all applicable discounts.
 
-### Decision Rules
+### BPMN Process
 
-The DMN decision uses the following rules:
+The process receives the customer's tier, cart value, and promotional code. The Business Rule Task evaluates the applicable discount rules and stores the aggregated discount percentage.
 
-| Credit Score | Loan Amount | Risk Tier | Manual Review |
-|---|---|---|---|
-| >= 750 | <= 50000 | LOW | false |
-| >= 750 | > 50000 | MEDIUM | true |
-| 600–749 | Any | MEDIUM | true |
-| < 600 | Any | HIGH | false |
+A Script Task then calculates the final invoice amount using:
 
-The decision uses the **Unique (U)** hit policy.
+`finalAmount = cartValue * (1 - (totalDiscount / 100))`
+
+An Exclusive Gateway determines whether manager sign-off is required. Orders with a final amount greater than or equal to 1000 are routed to the Manager Sign-off User Task. Orders below 1000 proceed directly to the warehouse.
+
+Both paths continue to the Send Order to Warehouse Service Task, completing the fulfillment flow.
+
+### Models
+
+- [View Multi-Item Order Discount BPMN](multi-item-order-discount/multi-item-order-discount.bpmn)
+- [View Discount Calculation DMN](multi-item-order-discount/calculate-discounts.dmn)
+
+### Sample Calculation
+
+For:
+
+- Customer tier: `PREMIUM`
+- Cart value: `600`
+- Promo code: `FESTIVE10`
+
+The applicable discounts are:
+
+- Premium customer: `10%`
+- Cart value >= 500: `5%`
+- FESTIVE10 promo code: `10%`
+
+Total discount:
+
+`10 + 5 + 10 = 25%`
+
+Final amount:
+
+`600 * (1 - 25 / 100) = 450`
+
+Since the final amount is below 1000, the order follows the direct warehouse path.
 
 ---
 
@@ -128,13 +149,17 @@ The decision uses the **Unique (U)** hit policy.
 
 ```text
 workflow-automation-engineering/
-│
+
 ├── README.md
 │
 ├── employee-leave-approval.bpmn
 ├── online-purchase-order-processing.bpmn
 ├── it-service-request.bpmn
 │
-└── loan-risk-routing/
-    ├── loan-risk-routing.bpmn
-    └── evaluate-loan-risk.dmn
+├── loan-risk-routing/
+│   ├── loan-risk-routing.bpmn
+│   └── evaluate-loan-risk.dmn
+│
+└── multi-item-order-discount/
+    ├── multi-item-order-discount.bpmn
+    └── calculate-discounts.dmn
