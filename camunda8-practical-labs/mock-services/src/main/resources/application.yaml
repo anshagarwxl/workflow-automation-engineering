@@ -1,0 +1,10 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: mock-services
+
+logging:
+  level:
+    edu.srmist.camunda.mock: INFO
