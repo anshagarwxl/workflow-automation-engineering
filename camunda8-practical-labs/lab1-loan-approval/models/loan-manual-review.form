@@ -1,0 +1,199 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_14",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Manual underwriting review\nApplication **{{applicationId}}** for **{{applicantName}}** ({{employmentType}}, {{employmentYears}} yrs).\n\nAutomated result: **{{eligibility.decision}}** - {{eligibility.reason}} (risk band {{eligibility.riskBand}})"
+    },
+    {
+      "type": "number",
+      "id": "Field_number_15",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "loanAmount",
+      "label": "Requested amount (INR)",
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_16",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "loanTermMonths",
+      "label": "Term (months)",
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_17",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "monthlyIncome",
+      "label": "Monthly income (INR)",
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_18",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "proposedEmi",
+      "label": "Proposed EMI (INR)",
+      "decimalDigits": 2,
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_19",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "dtiRatio",
+      "label": "Debt-to-income ratio",
+      "decimalDigits": 3,
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_20",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "loanToIncomeRatio",
+      "label": "Loan / annual income",
+      "decimalDigits": 3,
+      "disabled": true
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_21",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "creditCheckStatus",
+      "label": "Credit check status",
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_22",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "creditScore",
+      "label": "Credit score",
+      "disabled": true
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_23",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "riskGrade",
+      "label": "Bureau risk grade",
+      "disabled": true
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_24",
+      "layout": {
+        "row": "r5",
+        "columns": null
+      },
+      "key": "creditCheckError",
+      "label": "Credit check error (if any)",
+      "disabled": true
+    },
+    {
+      "type": "radio",
+      "id": "Field_radio_25",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "reviewDecision",
+      "label": "Your decision",
+      "values": [
+        {
+          "label": "Approve",
+          "value": "APPROVE"
+        },
+        {
+          "label": "Reject",
+          "value": "REJECT"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_26",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "approvedAmount",
+      "label": "Approved amount (optional, defaults to requested)",
+      "decimalDigits": 2,
+      "validate": {
+        "min": 1
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_27",
+      "layout": {
+        "row": "r7",
+        "columns": null
+      },
+      "key": "reviewerName",
+      "label": "Reviewer name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "Field_textarea_28",
+      "layout": {
+        "row": "r8",
+        "columns": null
+      },
+      "key": "reviewerComments",
+      "label": "Justification / comments",
+      "validate": {
+        "required": true,
+        "maxLength": 1000
+      }
+    }
+  ],
+  "type": "default",
+  "id": "loan-manual-review",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

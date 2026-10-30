@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_LoanEligibility" name="Loan Eligibility" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <decision id="loan-eligibility" name="Loan eligibility">
+    <description>Educational loan eligibility rules (not real lending policy). Hit policy FIRST: rules are evaluated top-down and the first match wins, so knock-out rules come first and the last rule is a catch-all.</description>
+    <decisionTable id="loan-eligibility_table" hitPolicy="FIRST">
+      <input id="Input_1" label="Credit score">
+        <inputExpression id="InputExpression_1" typeRef="number">
+          <text>creditScore</text>
+        </inputExpression>
+      </input>
+      <input id="Input_2" label="Defaults in last 24 months">
+        <inputExpression id="InputExpression_2" typeRef="number">
+          <text>defaultsLast24Months</text>
+        </inputExpression>
+      </input>
+      <input id="Input_3" label="Debt-to-income ratio">
+        <inputExpression id="InputExpression_3" typeRef="number">
+          <text>dtiRatio</text>
+        </inputExpression>
+      </input>
+      <input id="Input_4" label="Loan / annual income">
+        <inputExpression id="InputExpression_4" typeRef="number">
+          <text>loanToIncomeRatio</text>
+        </inputExpression>
+      </input>
+      <input id="Input_5" label="Employment type">
+        <inputExpression id="InputExpression_5" typeRef="string">
+          <text>employmentType</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" name="decision" label="Decision" typeRef="string">
+        <outputValues id="OutputValues_1">
+          <text>"APPROVED","REJECTED","MANUAL_REVIEW"</text>
+        </outputValues>
+      </output>
+      <output id="Output_2" name="reason" label="Reason" typeRef="string">
+      </output>
+      <output id="Output_3" name="riskBand" label="Risk band" typeRef="string">
+        <outputValues id="OutputValues_3">
+          <text>"LOW","MEDIUM","HIGH"</text>
+        </outputValues>
+      </output>
+      <rule id="Rule_1">
+        <description>Knock-out: repeated defaults</description>
+        <inputEntry id="Rule_1_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_2"><text>&gt;= 2</text></inputEntry>
+        <inputEntry id="Rule_1_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_5"><text>-</text></inputEntry>
+        <outputEntry id="Rule_1_Out_1"><text>"REJECTED"</text></outputEntry>
+        <outputEntry id="Rule_1_Out_2"><text>"Two or more payment defaults in the last 24 months"</text></outputEntry>
+        <outputEntry id="Rule_1_Out_3"><text>"HIGH"</text></outputEntry>
+      </rule>
+      <rule id="Rule_2">
+        <description>Knock-out: very low credit score</description>
+        <inputEntry id="Rule_2_In_1"><text>&lt; 550</text></inputEntry>
+        <inputEntry id="Rule_2_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_5"><text>-</text></inputEntry>
+        <outputEntry id="Rule_2_Out_1"><text>"REJECTED"</text></outputEntry>
+        <outputEntry id="Rule_2_Out_2"><text>"Credit score below 550"</text></outputEntry>
+        <outputEntry id="Rule_2_Out_3"><text>"HIGH"</text></outputEntry>
+      </rule>
+      <rule id="Rule_3">
+        <description>Knock-out: unaffordable repayments</description>
+        <inputEntry id="Rule_3_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_3"><text>&gt; 0.6</text></inputEntry>
+        <inputEntry id="Rule_3_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_5"><text>-</text></inputEntry>
+        <outputEntry id="Rule_3_Out_1"><text>"REJECTED"</text></outputEntry>
+        <outputEntry id="Rule_3_Out_2"><text>"Debt-to-income ratio above 60% after the new EMI"</text></outputEntry>
+        <outputEntry id="Rule_3_Out_3"><text>"HIGH"</text></outputEntry>
+      </rule>
+      <rule id="Rule_4">
+        <description>Knock-out: loan far too large for income</description>
+        <inputEntry id="Rule_4_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_4"><text>&gt; 8</text></inputEntry>
+        <inputEntry id="Rule_4_In_5"><text>-</text></inputEntry>
+        <outputEntry id="Rule_4_Out_1"><text>"REJECTED"</text></outputEntry>
+        <outputEntry id="Rule_4_Out_2"><text>"Requested amount is more than 8 times annual income"</text></outputEntry>
+        <outputEntry id="Rule_4_Out_3"><text>"HIGH"</text></outputEntry>
+      </rule>
+      <rule id="Rule_5">
+        <description>Knock-out: no income source</description>
+        <inputEntry id="Rule_5_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_5"><text>"UNEMPLOYED"</text></inputEntry>
+        <outputEntry id="Rule_5_Out_1"><text>"REJECTED"</text></outputEntry>
+        <outputEntry id="Rule_5_Out_2"><text>"No regular employment income"</text></outputEntry>
+        <outputEntry id="Rule_5_Out_3"><text>"HIGH"</text></outputEntry>
+      </rule>
+      <rule id="Rule_6">
+        <description>Straight-through approval</description>
+        <inputEntry id="Rule_6_In_1"><text>&gt;= 720</text></inputEntry>
+        <inputEntry id="Rule_6_In_2"><text>0</text></inputEntry>
+        <inputEntry id="Rule_6_In_3"><text>&lt;= 0.4</text></inputEntry>
+        <inputEntry id="Rule_6_In_4"><text>&lt;= 3</text></inputEntry>
+        <inputEntry id="Rule_6_In_5"><text>"SALARIED","SELF_EMPLOYED"</text></inputEntry>
+        <outputEntry id="Rule_6_Out_1"><text>"APPROVED"</text></outputEntry>
+        <outputEntry id="Rule_6_Out_2"><text>"Meets all automatic approval criteria"</text></outputEntry>
+        <outputEntry id="Rule_6_Out_3"><text>"LOW"</text></outputEntry>
+      </rule>
+      <rule id="Rule_7">
+        <description>Refer: near-prime</description>
+        <inputEntry id="Rule_7_In_1"><text>&gt;= 650</text></inputEntry>
+        <inputEntry id="Rule_7_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_3"><text>&lt;= 0.5</text></inputEntry>
+        <inputEntry id="Rule_7_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_5"><text>-</text></inputEntry>
+        <outputEntry id="Rule_7_Out_1"><text>"MANUAL_REVIEW"</text></outputEntry>
+        <outputEntry id="Rule_7_Out_2"><text>"Good profile but outside automatic approval thresholds"</text></outputEntry>
+        <outputEntry id="Rule_7_Out_3"><text>"MEDIUM"</text></outputEntry>
+      </rule>
+      <rule id="Rule_8">
+        <description>Catch-all: everything else is referred to an underwriter</description>
+        <inputEntry id="Rule_8_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_5"><text>-</text></inputEntry>
+        <outputEntry id="Rule_8_Out_1"><text>"MANUAL_REVIEW"</text></outputEntry>
+        <outputEntry id="Rule_8_Out_2"><text>"Borderline profile - underwriter judgement required"</text></outputEntry>
+        <outputEntry id="Rule_8_Out_3"><text>"HIGH"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_loan-eligibility" dmnElementRef="loan-eligibility">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

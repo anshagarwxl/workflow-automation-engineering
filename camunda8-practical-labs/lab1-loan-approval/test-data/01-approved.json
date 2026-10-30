@@ -1,0 +1,17 @@
+{
+  "_description": "Strong salaried applicant meeting all approval criteria",
+  "_expectedRoute": "Validate -> Credit assessment -> DMN APPROVED -> Issue loan offer",
+  "_expectedOutcome": "APPROVED",
+  "applicationId": "LA-1001",
+  "applicantId": "SYN-1001",
+  "applicantName": "Asha Test",
+  "applicantAge": 34,
+  "email": "asha.test@example.com",
+  "employmentType": "SALARIED",
+  "employmentYears": 6,
+  "monthlyIncome": 120000,
+  "existingMonthlyEmi": 5000,
+  "loanAmount": 500000,
+  "loanTermMonths": 36,
+  "loanPurpose": "HOME_RENOVATION"
+}

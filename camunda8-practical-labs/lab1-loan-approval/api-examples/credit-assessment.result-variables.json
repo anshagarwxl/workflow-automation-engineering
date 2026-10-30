@@ -1,0 +1,9 @@
+{
+  "creditCheckStatus": "COMPLETED",
+  "creditAssessmentId": "CBA-5001",
+  "creditScore": 780,
+  "riskGrade": "A",
+  "bureauStatus": "FOUND",
+  "activeLoans": 1,
+  "defaultsLast24Months": 0
+}

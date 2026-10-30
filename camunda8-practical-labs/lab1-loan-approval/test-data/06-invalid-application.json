@@ -1,0 +1,17 @@
+{
+  "_description": "Applicant aged 19 and loan amount above the 50 lakh limit: validation fails, application is rejected without calling the bureau",
+  "_expectedRoute": "Validate (INVALID) -> Send rejection notice",
+  "_expectedOutcome": "REJECTED",
+  "applicationId": "LA-1006",
+  "applicantId": "SYN-1006",
+  "applicantName": "Gita Young",
+  "applicantAge": 19,
+  "email": "gita.young@example.com",
+  "employmentType": "SALARIED",
+  "employmentYears": 1,
+  "monthlyIncome": 30000,
+  "existingMonthlyEmi": 0,
+  "loanAmount": 6000000,
+  "loanTermMonths": 84,
+  "loanPurpose": "PERSONAL"
+}

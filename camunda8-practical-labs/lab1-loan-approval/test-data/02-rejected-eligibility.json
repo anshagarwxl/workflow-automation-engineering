@@ -1,0 +1,17 @@
+{
+  "_description": "Applicant fails eligibility: bureau credit score 520 (< 550)",
+  "_expectedRoute": "Validate -> Credit assessment -> DMN REJECTED -> Send rejection notice",
+  "_expectedOutcome": "REJECTED",
+  "applicationId": "LA-1002",
+  "applicantId": "SYN-1002",
+  "applicantName": "Bharat Sample",
+  "applicantAge": 41,
+  "email": "bharat.sample@example.com",
+  "employmentType": "SELF_EMPLOYED",
+  "employmentYears": 3,
+  "monthlyIncome": 70000,
+  "existingMonthlyEmi": 12000,
+  "loanAmount": 400000,
+  "loanTermMonths": 48,
+  "loanPurpose": "VEHICLE"
+}

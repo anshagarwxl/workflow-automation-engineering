@@ -1,0 +1,12 @@
+{
+  "assessmentId": "CBA-5001",
+  "applicationId": "LA-1001",
+  "applicantId": "SYN-1001",
+  "bureauStatus": "FOUND",
+  "creditScore": 780,
+  "riskGrade": "A",
+  "activeLoans": 1,
+  "defaultsLast24Months": 0,
+  "existingObligationRatio": 0.042,
+  "assessedAt": "2026-11-02T10:15:30.123Z"
+}

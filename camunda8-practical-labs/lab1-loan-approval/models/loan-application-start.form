@@ -1,0 +1,230 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_1",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Loan application\nSynthetic test data only. Applicant ids SYN-1001 to SYN-1006 exist in the mock credit bureau; SYN-9408 simulates a bureau timeout and SYN-9500 an HTTP 500."
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_2",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "applicationId",
+      "label": "Application ID",
+      "description": "Format LA-0000",
+      "validate": {
+        "required": true,
+        "pattern": "^LA-[0-9]{4}$"
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_3",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "applicantId",
+      "label": "Applicant ID (synthetic)",
+      "description": "Format SYN-0000",
+      "validate": {
+        "required": true,
+        "pattern": "^SYN-[0-9]{4}$"
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_4",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "applicantName",
+      "label": "Applicant name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_5",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "applicantAge",
+      "label": "Age (years)",
+      "validate": {
+        "required": true,
+        "min": 18,
+        "max": 100
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_6",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "email",
+      "label": "Email (use @example.com)",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_7",
+      "layout": {
+        "row": "r5",
+        "columns": null
+      },
+      "key": "employmentType",
+      "label": "Employment type",
+      "values": [
+        {
+          "label": "Salaried",
+          "value": "SALARIED"
+        },
+        {
+          "label": "Self-employed",
+          "value": "SELF_EMPLOYED"
+        },
+        {
+          "label": "Unemployed",
+          "value": "UNEMPLOYED"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_8",
+      "layout": {
+        "row": "r5",
+        "columns": null
+      },
+      "key": "employmentYears",
+      "label": "Years in current employment",
+      "validate": {
+        "required": true,
+        "min": 0,
+        "max": 50
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_9",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "monthlyIncome",
+      "label": "Monthly income (INR)",
+      "decimalDigits": 2,
+      "validate": {
+        "required": true,
+        "min": 0
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_10",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "existingMonthlyEmi",
+      "label": "Existing monthly EMIs (INR)",
+      "decimalDigits": 2,
+      "validate": {
+        "required": true,
+        "min": 0
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_11",
+      "layout": {
+        "row": "r7",
+        "columns": null
+      },
+      "key": "loanAmount",
+      "label": "Requested loan amount (INR)",
+      "decimalDigits": 2,
+      "validate": {
+        "required": true,
+        "min": 1
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_12",
+      "layout": {
+        "row": "r7",
+        "columns": null
+      },
+      "key": "loanTermMonths",
+      "label": "Term (months)",
+      "validate": {
+        "required": true,
+        "min": 1,
+        "max": 360
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_13",
+      "layout": {
+        "row": "r8",
+        "columns": null
+      },
+      "key": "loanPurpose",
+      "label": "Purpose",
+      "values": [
+        {
+          "label": "Home renovation",
+          "value": "HOME_RENOVATION"
+        },
+        {
+          "label": "Education",
+          "value": "EDUCATION"
+        },
+        {
+          "label": "Vehicle",
+          "value": "VEHICLE"
+        },
+        {
+          "label": "Medical",
+          "value": "MEDICAL"
+        },
+        {
+          "label": "Personal",
+          "value": "PERSONAL"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "loan-application-start",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

@@ -1,0 +1,17 @@
+{
+  "_description": "monthlyIncome is sent as the text '45k'. The validation worker cannot parse it and fails the job with 0 retries -> incident. Fix: in Operate edit monthlyIncome to 45000 and click Retry",
+  "_expectedRoute": "Validate (INCIDENT) -> [fix variable in Operate + retry] -> Credit assessment -> DMN APPROVED -> Issue loan offer",
+  "_expectedOutcome": "APPROVED",
+  "applicationId": "LA-1005",
+  "applicantId": "SYN-1005",
+  "applicantName": "Farhan Fixme",
+  "applicantAge": 31,
+  "email": "farhan.fixme@example.com",
+  "employmentType": "SALARIED",
+  "employmentYears": 4,
+  "monthlyIncome": "45k",
+  "existingMonthlyEmi": 2000,
+  "loanAmount": 300000,
+  "loanTermMonths": 36,
+  "loanPurpose": "MEDICAL"
+}

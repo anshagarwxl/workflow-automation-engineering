@@ -1,0 +1,17 @@
+{
+  "_description": "Credit bureau answers HTTP 500 (applicant SYN-9500); error is caught and routed to manual review; reject it in Tasklist",
+  "_expectedRoute": "Validate -> Credit assessment (HTTP 500) -> boundary error CREDIT_API_ERROR -> Manual underwriting review (REJECT) -> Send rejection notice",
+  "_expectedOutcome": "REJECTED",
+  "applicationId": "LA-1007",
+  "applicantId": "SYN-9500",
+  "applicantName": "Esha Error",
+  "applicantAge": 45,
+  "email": "esha.error@example.com",
+  "employmentType": "SELF_EMPLOYED",
+  "employmentYears": 10,
+  "monthlyIncome": 150000,
+  "existingMonthlyEmi": 20000,
+  "loanAmount": 900000,
+  "loanTermMonths": 60,
+  "loanPurpose": "HOME_RENOVATION"
+}

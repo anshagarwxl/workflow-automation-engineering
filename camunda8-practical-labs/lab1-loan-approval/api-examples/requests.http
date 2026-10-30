@@ -1,0 +1,37 @@
+### Health of the mock credit bureau: direct call (same request the REST Connector sends)
+POST http://localhost:8090/credit-bureau/api/v1/assessments
+Content-Type: application/json
+X-Correlation-Id: LA-1001
+
+< ./credit-assessment.request.json
+
+### Simulated HTTP 500 (applicant SYN-9500)
+POST http://localhost:8090/credit-bureau/api/v1/assessments
+Content-Type: application/json
+
+{"applicationId": "LA-1007", "applicantId": "SYN-9500", "monthlyIncome": 150000, "existingMonthlyEmi": 20000, "loanAmount": 900000}
+
+### Start a loan application through the lab app
+POST http://localhost:8091/api/process-instances
+Content-Type: application/json
+
+< ./start-instance.request.json
+
+### Start a loan application directly through the Camunda 8 REST API (v2)
+POST http://localhost:8080/v2/process-instances
+Content-Type: application/json
+
+< ./camunda-rest-create-instance.request.json
+
+### Start a predefined scenario
+POST http://localhost:8091/api/scenarios/03-manual-review/start
+
+### Live results table
+GET http://localhost:8091/api/scenarios/results.md
+
+### Fault injection: every credit call fails / is slow / back to normal
+PUT http://localhost:8090/admin/faults/credit?mode=DOWN
+###
+PUT http://localhost:8090/admin/faults/credit?mode=SLOW
+###
+PUT http://localhost:8090/admin/faults/credit?mode=UP

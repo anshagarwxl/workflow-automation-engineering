@@ -1,0 +1,17 @@
+{
+  "_description": "Credit bureau does not answer within the 5 s read timeout (applicant SYN-9408); error is caught and routed to manual review; reject it in Tasklist",
+  "_expectedRoute": "Validate -> Credit assessment (timeout) -> boundary error CREDIT_API_ERROR -> Manual underwriting review (REJECT) -> Send rejection notice",
+  "_expectedOutcome": "REJECTED",
+  "applicationId": "LA-1004",
+  "applicantId": "SYN-9408",
+  "applicantName": "Dev Timeout",
+  "applicantAge": 38,
+  "email": "dev.timeout@example.com",
+  "employmentType": "SALARIED",
+  "employmentYears": 8,
+  "monthlyIncome": 90000,
+  "existingMonthlyEmi": 10000,
+  "loanAmount": 600000,
+  "loanTermMonths": 48,
+  "loanPurpose": "PERSONAL"
+}

@@ -1,0 +1,17 @@
+{
+  "_description": "Near-prime applicant (score 690, DTI 0.43) referred to an underwriter; approve it in Tasklist",
+  "_expectedRoute": "Validate -> Credit assessment -> DMN MANUAL_REVIEW -> Manual underwriting review (APPROVE) -> Issue loan offer",
+  "_expectedOutcome": "APPROVED",
+  "applicationId": "LA-1003",
+  "applicantId": "SYN-1003",
+  "applicantName": "Chitra Demo",
+  "applicantAge": 29,
+  "email": "chitra.demo@example.com",
+  "employmentType": "SALARIED",
+  "employmentYears": 2,
+  "monthlyIncome": 60000,
+  "existingMonthlyEmi": 8000,
+  "loanAmount": 800000,
+  "loanTermMonths": 60,
+  "loanPurpose": "EDUCATION"
+}

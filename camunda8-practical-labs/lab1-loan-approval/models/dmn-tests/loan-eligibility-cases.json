@@ -1,0 +1,14 @@
+[
+  {"name": "S01 strong salaried applicant", "input": {"creditScore": 780, "defaultsLast24Months": 0, "dtiRatio": 0.18, "loanToIncomeRatio": 0.35, "employmentType": "SALARIED"}, "expected": {"decision": "APPROVED"}},
+  {"name": "S02 credit score 520", "input": {"creditScore": 520, "defaultsLast24Months": 1, "dtiRatio": 0.25, "loanToIncomeRatio": 0.5, "employmentType": "SALARIED"}, "expected": {"decision": "REJECTED", "reason": "Credit score below 550"}},
+  {"name": "S03 near-prime 690, DTI 0.43", "input": {"creditScore": 690, "defaultsLast24Months": 0, "dtiRatio": 0.43, "loanToIncomeRatio": 1.11, "employmentType": "SALARIED"}, "expected": {"decision": "MANUAL_REVIEW", "riskBand": "MEDIUM"}},
+  {"name": "Two defaults", "input": {"creditScore": 640, "defaultsLast24Months": 2, "dtiRatio": 0.3, "loanToIncomeRatio": 1.0, "employmentType": "SALARIED"}, "expected": {"decision": "REJECTED", "riskBand": "HIGH"}},
+  {"name": "DTI 0.65", "input": {"creditScore": 760, "defaultsLast24Months": 0, "dtiRatio": 0.65, "loanToIncomeRatio": 1.0, "employmentType": "SALARIED"}, "expected": {"decision": "REJECTED"}},
+  {"name": "Loan 9x income", "input": {"creditScore": 760, "defaultsLast24Months": 0, "dtiRatio": 0.3, "loanToIncomeRatio": 9, "employmentType": "SALARIED"}, "expected": {"decision": "REJECTED"}},
+  {"name": "Unemployed", "input": {"creditScore": 700, "defaultsLast24Months": 0, "dtiRatio": 0.3, "loanToIncomeRatio": 1.0, "employmentType": "UNEMPLOYED"}, "expected": {"decision": "REJECTED", "reason": "No regular employment income"}},
+  {"name": "No bureau history (score 600)", "input": {"creditScore": 600, "defaultsLast24Months": 0, "dtiRatio": 0.3, "loanToIncomeRatio": 1.0, "employmentType": "SALARIED"}, "expected": {"decision": "MANUAL_REVIEW", "riskBand": "HIGH"}},
+  {"name": "Self-employed strong profile", "input": {"creditScore": 735, "defaultsLast24Months": 0, "dtiRatio": 0.35, "loanToIncomeRatio": 2.5, "employmentType": "SELF_EMPLOYED"}, "expected": {"decision": "APPROVED"}},
+  {"name": "Boundary: exactly 720 / 0.40 / 3.0", "input": {"creditScore": 720, "defaultsLast24Months": 0, "dtiRatio": 0.40, "loanToIncomeRatio": 3.0, "employmentType": "SALARIED"}, "expected": {"decision": "APPROVED"}},
+  {"name": "Boundary: score 719", "input": {"creditScore": 719, "defaultsLast24Months": 0, "dtiRatio": 0.40, "loanToIncomeRatio": 3.0, "employmentType": "SALARIED"}, "expected": {"decision": "MANUAL_REVIEW", "riskBand": "MEDIUM"}},
+  {"name": "S05 after Operate fix (income 45000)", "input": {"creditScore": 750, "defaultsLast24Months": 0, "dtiRatio": 0.27, "loanToIncomeRatio": 0.56, "employmentType": "SALARIED"}, "expected": {"decision": "APPROVED"}}
+]
