@@ -1,0 +1,76 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_13",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Immediate clinical assessment (simulated)\n**Patient {{patientRef}}** (age {{ageYears}}) - {{department}}\n\nSymptoms: {{symptomsSummary}}\n\nIndicators: chest pain {{chestPain}}, breathing difficulty {{breathingDifficulty}}, pain score {{painScore}}/10, high fever {{highFever}}, duration {{symptomDurationDays}} day(s).\n\nTriage: **{{triage.category}}** - {{triage.reason}} (target: {{triage.targetResponse}})"
+    },
+    {
+      "type": "select",
+      "id": "Field_select_14",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "assessmentOutcome",
+      "label": "Assessment outcome",
+      "values": [
+        {
+          "label": "Admitted for emergency care",
+          "value": "ADMITTED_FOR_EMERGENCY_CARE"
+        },
+        {
+          "label": "Urgent specialist referral",
+          "value": "URGENT_SPECIALIST_REFERRAL"
+        },
+        {
+          "label": "Assessed and discharged",
+          "value": "ASSESSED_AND_DISCHARGED"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_15",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "assessedBy",
+      "label": "Assessed by (staff id)",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "Field_textarea_16",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "assessmentNotes",
+      "label": "Notes",
+      "validate": {
+        "required": true,
+        "maxLength": 1000
+      }
+    }
+  ],
+  "type": "default",
+  "id": "urgent-assessment",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

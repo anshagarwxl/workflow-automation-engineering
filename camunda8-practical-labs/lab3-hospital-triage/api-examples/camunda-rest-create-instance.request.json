@@ -1,0 +1,16 @@
+{
+  "processDefinitionId": "hospital-appointment-process",
+  "variables": {
+    "ageYears": 34,
+    "department": "GENERAL_MEDICINE",
+    "preferredDate": "2026-11-05",
+    "preferredSession": "MORNING",
+    "chestPain": false,
+    "breathingDifficulty": false,
+    "highFever": false,
+    "painScore": 2,
+    "symptomDurationDays": 5,
+    "patientRef": "SYN-PAT-3001",
+    "symptomsSummary": "Mild seasonal cough and sore throat for five days"
+  }
+}

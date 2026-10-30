@@ -1,0 +1,72 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_21",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## No suitable appointment slot\n**Patient {{patientRef}}** (age {{ageYears}}) - {{department}}\n\nSymptoms: {{symptomsSummary}}\n\nIndicators: chest pain {{chestPain}}, breathing difficulty {{breathingDifficulty}}, pain score {{painScore}}/10, high fever {{highFever}}, duration {{symptomDurationDays}} day(s).\n\nTriage: **{{triage.category}}** - {{triage.reason}} (target: {{triage.targetResponse}})\n\nRequested **{{appointmentDate}}** ({{preferredSession}}). Slots found: {{availableSlotCount}}. Booking status: {{bookingStatus}}."
+    },
+    {
+      "type": "select",
+      "id": "Field_select_22",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "schedulingOutcome",
+      "label": "Action taken",
+      "values": [
+        {
+          "label": "Added to waiting list",
+          "value": "WAITLISTED"
+        },
+        {
+          "label": "Slot assigned manually (overbook / other clinic day)",
+          "value": "MANUAL_SLOT_ASSIGNED"
+        },
+        {
+          "label": "Referred to another centre",
+          "value": "REFERRED_ELSEWHERE"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_23",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "manualSlotDetails",
+      "label": "Manual slot / referral details"
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_24",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "handledBy",
+      "label": "Handled by (staff id)",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "manual-scheduling",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

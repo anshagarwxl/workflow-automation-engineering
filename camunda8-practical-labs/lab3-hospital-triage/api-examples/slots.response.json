@@ -1,0 +1,62 @@
+{
+  "department": "GENERAL_MEDICINE",
+  "date": "2026-11-05",
+  "session": "MORNING",
+  "slotCount": 6,
+  "slots": [
+    {
+      "slotId": "GEN-20261105-0900",
+      "department": "GENERAL_MEDICINE",
+      "doctorCode": "DR-GEN-02",
+      "date": "2026-11-05",
+      "startTime": "09:00",
+      "endTime": "09:30",
+      "session": "MORNING"
+    },
+    {
+      "slotId": "GEN-20261105-0930",
+      "department": "GENERAL_MEDICINE",
+      "doctorCode": "DR-GEN-02",
+      "date": "2026-11-05",
+      "startTime": "09:30",
+      "endTime": "10:00",
+      "session": "MORNING"
+    },
+    {
+      "slotId": "GEN-20261105-1000",
+      "department": "GENERAL_MEDICINE",
+      "doctorCode": "DR-GEN-01",
+      "date": "2026-11-05",
+      "startTime": "10:00",
+      "endTime": "10:30",
+      "session": "MORNING"
+    },
+    {
+      "slotId": "GEN-20261105-1030",
+      "department": "GENERAL_MEDICINE",
+      "doctorCode": "DR-GEN-01",
+      "date": "2026-11-05",
+      "startTime": "10:30",
+      "endTime": "11:00",
+      "session": "MORNING"
+    },
+    {
+      "slotId": "GEN-20261105-1100",
+      "department": "GENERAL_MEDICINE",
+      "doctorCode": "DR-GEN-02",
+      "date": "2026-11-05",
+      "startTime": "11:00",
+      "endTime": "11:30",
+      "session": "MORNING"
+    },
+    {
+      "slotId": "GEN-20261105-1130",
+      "department": "GENERAL_MEDICINE",
+      "doctorCode": "DR-GEN-02",
+      "date": "2026-11-05",
+      "startTime": "11:30",
+      "endTime": "12:00",
+      "session": "MORNING"
+    }
+  ]
+}

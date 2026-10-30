@@ -1,0 +1,16 @@
+{
+  "ageYears": 34,
+  "department": "GENERAL_MEDICINE",
+  "preferredDate": "{{TODAY-2}}",
+  "preferredSession": "MORNING",
+  "chestPain": false,
+  "breathingDifficulty": false,
+  "highFever": false,
+  "painScore": 2,
+  "symptomDurationDays": 5,
+  "_description": "Real-looking patient name instead of a synthetic reference and a date in the past -> registration rejected",
+  "_expectedRoute": "Validate (registrationValid=false) -> Notify: registration rejected",
+  "_expectedOutcome": "REJECTED_INVALID",
+  "patientRef": "John Smith",
+  "symptomsSummary": "Headache"
+}

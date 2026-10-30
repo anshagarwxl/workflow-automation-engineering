@@ -1,0 +1,16 @@
+{
+  "ageYears": 34,
+  "department": "GENERAL_MEDICINE",
+  "preferredDate": "{{TODAY+3}}",
+  "preferredSession": "MORNING",
+  "chestPain": false,
+  "breathingDifficulty": false,
+  "highFever": false,
+  "painScore": 2,
+  "symptomDurationDays": 5,
+  "_description": "Routine request (pain 2, no red flags) with free morning slots in General Medicine",
+  "_expectedRoute": "Validate -> DMN ROUTINE -> Retrieve slots (10) -> Request booking CONFIRMED -> Confirmation",
+  "_expectedOutcome": "BOOKED",
+  "patientRef": "SYN-PAT-3001",
+  "symptomsSummary": "Mild seasonal cough and sore throat for five days"
+}

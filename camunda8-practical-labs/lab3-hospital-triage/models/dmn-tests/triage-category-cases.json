@@ -1,0 +1,14 @@
+[
+  {"name": "S01 routine, pain 2", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 2, "highFever": false, "ageYears": 34, "symptomDurationDays": 5}, "expected": {"category": "ROUTINE"}},
+  {"name": "S02 moderate pain 6", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 6, "highFever": false, "ageYears": 52, "symptomDurationDays": 3}, "expected": {"category": "PRIORITY_REVIEW", "reason": "Moderate pain (5-7)"}},
+  {"name": "S03 chest pain", "input": {"chestPain": true, "breathingDifficulty": false, "painScore": 4, "highFever": false, "ageYears": 61, "symptomDurationDays": 0}, "expected": {"category": "URGENT_ASSESSMENT", "targetResponse": "Immediate"}},
+  {"name": "Breathing difficulty", "input": {"chestPain": false, "breathingDifficulty": true, "painScore": 1, "highFever": false, "ageYears": 30, "symptomDurationDays": 1}, "expected": {"category": "URGENT_ASSESSMENT"}},
+  {"name": "Pain 8", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 8, "highFever": false, "ageYears": 30, "symptomDurationDays": 1}, "expected": {"category": "URGENT_ASSESSMENT", "reason": "Severe pain (8-10)"}},
+  {"name": "Fever, child aged 3", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 2, "highFever": true, "ageYears": 3, "symptomDurationDays": 2}, "expected": {"category": "PRIORITY_REVIEW", "targetResponse": "Within 2 hours"}},
+  {"name": "Fever, adult aged 30", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 2, "highFever": true, "ageYears": 30, "symptomDurationDays": 2}, "expected": {"category": "PRIORITY_REVIEW", "reason": "High fever"}},
+  {"name": "Symptoms 20 days", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 3, "highFever": false, "ageYears": 45, "symptomDurationDays": 20}, "expected": {"category": "PRIORITY_REVIEW", "targetResponse": "Within 24 hours"}},
+  {"name": "S04 dermatology routine", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 1, "highFever": false, "ageYears": 27, "symptomDurationDays": 10}, "expected": {"category": "ROUTINE"}},
+  {"name": "S05 paediatric routine", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 3, "highFever": false, "ageYears": 6, "symptomDurationDays": 2}, "expected": {"category": "ROUTINE"}},
+  {"name": "Boundary pain 7", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 7, "highFever": false, "ageYears": 40, "symptomDurationDays": 1}, "expected": {"category": "PRIORITY_REVIEW"}},
+  {"name": "Boundary 14 days", "input": {"chestPain": false, "breathingDifficulty": false, "painScore": 4, "highFever": false, "ageYears": 40, "symptomDurationDays": 14}, "expected": {"category": "ROUTINE"}}
+]

@@ -1,0 +1,71 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_17",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Priority staff review\n**Patient {{patientRef}}** (age {{ageYears}}) - {{department}}\n\nSymptoms: {{symptomsSummary}}\n\nIndicators: chest pain {{chestPain}}, breathing difficulty {{breathingDifficulty}}, pain score {{painScore}}/10, high fever {{highFever}}, duration {{symptomDurationDays}} day(s).\n\nTriage: **{{triage.category}}** - {{triage.reason}} (target: {{triage.targetResponse}})"
+    },
+    {
+      "type": "radio",
+      "id": "Field_radio_18",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "priorityReviewOutcome",
+      "label": "Outcome",
+      "values": [
+        {
+          "label": "Proceed to booking (priority)",
+          "value": "PROCEED_TO_BOOKING"
+        },
+        {
+          "label": "Refer to emergency department",
+          "value": "REFER_TO_EMERGENCY"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_19",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "reviewedBy",
+      "label": "Reviewed by (staff id)",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "Field_textarea_20",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "reviewNotes",
+      "label": "Notes",
+      "validate": {
+        "maxLength": 1000
+      }
+    }
+  ],
+  "type": "default",
+  "id": "priority-review",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

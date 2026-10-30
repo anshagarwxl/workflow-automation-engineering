@@ -1,0 +1,8 @@
+{
+  "bookingId": "BKG-90001",
+  "status": "CONFIRMED",
+  "slotId": "GEN-20261105-0900",
+  "patientRef": "SYN-PAT-3001",
+  "urgencyCategory": "ROUTINE",
+  "bookedAt": "2026-11-02T10:31:12.778Z"
+}

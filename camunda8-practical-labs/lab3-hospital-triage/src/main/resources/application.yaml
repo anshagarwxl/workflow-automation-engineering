@@ -1,0 +1,41 @@
+server:
+  port: 8093
+
+spring:
+  application:
+    name: lab3-hospital-triage
+
+camunda:
+  client:
+    mode: self-managed
+    # Camunda 8 Run (c8run) defaults. For the Docker Compose distribution use rest-address http://localhost:8088
+    rest-address: http://localhost:8080
+    grpc-address: http://localhost:26500
+    auth:
+      # c8run 8.8 does not protect the API by default. If you get HTTP 401, switch to:
+      #   method: basic / username: demo / password: demo
+      method: none
+
+lab3:
+  # Used by the booking worker (the REST connector uses the process variable mockApiBaseUrl or its BPMN default)
+  scheduling-base-url: http://localhost:8090
+
+lab:
+  process-id: hospital-appointment-process
+  outcome-variable: finalOutcome
+  # Docker-based Camunda: http://host.docker.internal:8090 (empty = BPMN default http://localhost:8090)
+  mock-api-base-url:
+  report-variables:
+    - patientRef
+    - registrationValid
+    - triage
+    - priorityReviewOutcome
+    - availableSlotCount
+    - bookingStatus
+    - bookingId
+    - appointmentTime
+    - schedulingOutcome
+
+logging:
+  level:
+    edu.srmist.camunda: INFO

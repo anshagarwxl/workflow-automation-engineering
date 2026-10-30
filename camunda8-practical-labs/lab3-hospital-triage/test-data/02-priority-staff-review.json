@@ -1,0 +1,16 @@
+{
+  "ageYears": 52,
+  "department": "ORTHOPAEDICS",
+  "preferredDate": "{{TODAY+3}}",
+  "preferredSession": "AFTERNOON",
+  "chestPain": false,
+  "breathingDifficulty": false,
+  "highFever": false,
+  "painScore": 6,
+  "symptomDurationDays": 3,
+  "_description": "Moderate pain (6/10) -> priority staff review; choose 'Proceed to booking' in Tasklist",
+  "_expectedRoute": "Validate -> DMN PRIORITY_REVIEW -> Priority staff review (PROCEED) -> Retrieve slots -> Booking CONFIRMED",
+  "_expectedOutcome": "BOOKED",
+  "patientRef": "SYN-PAT-3002",
+  "symptomsSummary": "Knee pain after a fall, swelling, difficulty climbing stairs"
+}

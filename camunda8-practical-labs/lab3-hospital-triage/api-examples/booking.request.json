@@ -1,0 +1,6 @@
+{
+  "slotId": "GEN-20261105-0900",
+  "patientRef": "SYN-PAT-3001",
+  "urgencyCategory": "ROUTINE",
+  "requestedBy": "camunda-lab3-worker"
+}

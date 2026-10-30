@@ -1,0 +1,16 @@
+{
+  "ageYears": 61,
+  "department": "CARDIOLOGY",
+  "preferredDate": "{{TODAY}}",
+  "preferredSession": "ANY",
+  "chestPain": true,
+  "breathingDifficulty": false,
+  "highFever": false,
+  "painScore": 4,
+  "symptomDurationDays": 0,
+  "_description": "Chest pain reported -> urgent assessment task for clinicians (complete it in Tasklist)",
+  "_expectedRoute": "Validate -> DMN URGENT_ASSESSMENT -> Immediate clinical assessment -> Record urgent assessment",
+  "_expectedOutcome": "URGENT_ASSESSMENT",
+  "patientRef": "SYN-PAT-3003",
+  "symptomsSummary": "Sudden chest tightness radiating to left arm"
+}

@@ -1,0 +1,16 @@
+{
+  "ageYears": 27,
+  "department": "DERMATOLOGY",
+  "preferredDate": "{{TODAY+3}}",
+  "preferredSession": "ANY",
+  "chestPain": false,
+  "breathingDifficulty": false,
+  "highFever": false,
+  "painScore": 1,
+  "symptomDurationDays": 10,
+  "_description": "Routine dermatology request; the mock calendar has no free dermatology slots -> staff task; choose 'Added to waiting list'",
+  "_expectedRoute": "Validate -> DMN ROUTINE -> Retrieve slots (0) -> Staff review: no suitable slot (WAITLISTED) -> Notify",
+  "_expectedOutcome": "WAITLISTED",
+  "patientRef": "SYN-PAT-3004",
+  "symptomsSummary": "Itchy rash on forearms"
+}

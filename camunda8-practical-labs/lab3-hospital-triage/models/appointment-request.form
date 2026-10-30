@@ -1,0 +1,205 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_1",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Appointment request\n**Synthetic patients only** - use a reference like SYN-PAT-3001, never a real name or medical record number. The triage rules are educational, not clinical guidance."
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_2",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "patientRef",
+      "label": "Synthetic patient reference",
+      "validate": {
+        "required": true,
+        "pattern": "^SYN-PAT-[0-9]{4}$"
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_3",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "ageYears",
+      "label": "Age (years)",
+      "validate": {
+        "required": true,
+        "min": 0,
+        "max": 120
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_4",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "department",
+      "label": "Department",
+      "values": [
+        {
+          "label": "General medicine",
+          "value": "GENERAL_MEDICINE"
+        },
+        {
+          "label": "Cardiology",
+          "value": "CARDIOLOGY"
+        },
+        {
+          "label": "Orthopaedics",
+          "value": "ORTHOPAEDICS"
+        },
+        {
+          "label": "Paediatrics",
+          "value": "PAEDIATRICS"
+        },
+        {
+          "label": "Dermatology (fully booked in the mock)",
+          "value": "DERMATOLOGY"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "datetime",
+      "id": "Field_datetime_5",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "preferredDate",
+      "dateLabel": "Preferred date",
+      "subtype": "date",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_6",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "preferredSession",
+      "label": "Preferred session",
+      "values": [
+        {
+          "label": "Any time",
+          "value": "ANY"
+        },
+        {
+          "label": "Morning",
+          "value": "MORNING"
+        },
+        {
+          "label": "Afternoon",
+          "value": "AFTERNOON"
+        }
+      ],
+      "defaultValue": "ANY",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "Field_textarea_7",
+      "layout": {
+        "row": "r5",
+        "columns": null
+      },
+      "key": "symptomsSummary",
+      "label": "Symptoms summary",
+      "validate": {
+        "required": true,
+        "maxLength": 500
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "Field_checkbox_8",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "chestPain",
+      "label": "Chest pain",
+      "defaultValue": false
+    },
+    {
+      "type": "checkbox",
+      "id": "Field_checkbox_9",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "breathingDifficulty",
+      "label": "Breathing difficulty",
+      "defaultValue": false
+    },
+    {
+      "type": "checkbox",
+      "id": "Field_checkbox_10",
+      "layout": {
+        "row": "r6",
+        "columns": null
+      },
+      "key": "highFever",
+      "label": "High fever",
+      "defaultValue": false
+    },
+    {
+      "type": "number",
+      "id": "Field_number_11",
+      "layout": {
+        "row": "r7",
+        "columns": null
+      },
+      "key": "painScore",
+      "label": "Pain score (0-10)",
+      "validate": {
+        "required": true,
+        "min": 0,
+        "max": 10
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_12",
+      "layout": {
+        "row": "r7",
+        "columns": null
+      },
+      "key": "symptomDurationDays",
+      "label": "Symptom duration (days)",
+      "validate": {
+        "required": true,
+        "min": 0,
+        "max": 365
+      }
+    }
+  ],
+  "type": "default",
+  "id": "appointment-request",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

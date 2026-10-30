@@ -1,0 +1,17 @@
+{
+  "ageYears": 6,
+  "department": "PAEDIATRICS",
+  "preferredDate": "{{TODAY+3}}",
+  "preferredSession": "ANY",
+  "chestPain": false,
+  "breathingDifficulty": false,
+  "highFever": false,
+  "painScore": 3,
+  "symptomDurationDays": 2,
+  "_manualStartOnly": true,
+  "_description": "FIRST set scheduling mock DOWN (PUT http://localhost:8090/admin/faults/scheduling?mode=DOWN), then start. Slot lookup retries 3x (10 s back-off) -> incident. Set mode=UP and retry in Operate",
+  "_expectedRoute": "Validate -> DMN ROUTINE -> Retrieve slots (INCIDENT) -> [service UP + retry] -> Booking CONFIRMED",
+  "_expectedOutcome": "BOOKED",
+  "patientRef": "SYN-PAT-3005",
+  "symptomsSummary": "Ear ache, mild temperature"
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_TriageCategory" name="Triage Category" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <decision id="triage-category" name="Triage category">
+    <description>EDUCATIONAL triage rules for a simulated workflow - not clinical guidance. Hit policy FIRST: red flags first, catch-all ROUTINE last.</description>
+    <decisionTable id="triage-category_table" hitPolicy="FIRST">
+      <input id="Input_1" label="Chest pain">
+        <inputExpression id="InputExpression_1" typeRef="boolean">
+          <text>chestPain</text>
+        </inputExpression>
+      </input>
+      <input id="Input_2" label="Breathing difficulty">
+        <inputExpression id="InputExpression_2" typeRef="boolean">
+          <text>breathingDifficulty</text>
+        </inputExpression>
+      </input>
+      <input id="Input_3" label="Pain score (0-10)">
+        <inputExpression id="InputExpression_3" typeRef="number">
+          <text>painScore</text>
+        </inputExpression>
+      </input>
+      <input id="Input_4" label="High fever">
+        <inputExpression id="InputExpression_4" typeRef="boolean">
+          <text>highFever</text>
+        </inputExpression>
+      </input>
+      <input id="Input_5" label="Age (years)">
+        <inputExpression id="InputExpression_5" typeRef="number">
+          <text>ageYears</text>
+        </inputExpression>
+      </input>
+      <input id="Input_6" label="Symptom duration (days)">
+        <inputExpression id="InputExpression_6" typeRef="number">
+          <text>symptomDurationDays</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" name="category" label="Triage category" typeRef="string">
+        <outputValues id="OutputValues_1">
+          <text>"URGENT_ASSESSMENT","PRIORITY_REVIEW","ROUTINE"</text>
+        </outputValues>
+      </output>
+      <output id="Output_2" name="reason" label="Reason" typeRef="string">
+      </output>
+      <output id="Output_3" name="targetResponse" label="Target response" typeRef="string">
+      </output>
+      <rule id="Rule_1">
+        <description>Red flag</description>
+        <inputEntry id="Rule_1_In_1"><text>true</text></inputEntry>
+        <inputEntry id="Rule_1_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_1_Out_1"><text>"URGENT_ASSESSMENT"</text></outputEntry>
+        <outputEntry id="Rule_1_Out_2"><text>"Chest pain reported"</text></outputEntry>
+        <outputEntry id="Rule_1_Out_3"><text>"Immediate"</text></outputEntry>
+      </rule>
+      <rule id="Rule_2">
+        <description>Red flag</description>
+        <inputEntry id="Rule_2_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_2"><text>true</text></inputEntry>
+        <inputEntry id="Rule_2_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_2_Out_1"><text>"URGENT_ASSESSMENT"</text></outputEntry>
+        <outputEntry id="Rule_2_Out_2"><text>"Breathing difficulty reported"</text></outputEntry>
+        <outputEntry id="Rule_2_Out_3"><text>"Immediate"</text></outputEntry>
+      </rule>
+      <rule id="Rule_3">
+        <description>Red flag</description>
+        <inputEntry id="Rule_3_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_3"><text>&gt;= 8</text></inputEntry>
+        <inputEntry id="Rule_3_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_3_Out_1"><text>"URGENT_ASSESSMENT"</text></outputEntry>
+        <outputEntry id="Rule_3_Out_2"><text>"Severe pain (8-10)"</text></outputEntry>
+        <outputEntry id="Rule_3_Out_3"><text>"Immediate"</text></outputEntry>
+      </rule>
+      <rule id="Rule_4">
+        <description></description>
+        <inputEntry id="Rule_4_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_4"><text>true</text></inputEntry>
+        <inputEntry id="Rule_4_In_5"><text>&lt; 5, &gt;= 65</text></inputEntry>
+        <inputEntry id="Rule_4_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_4_Out_1"><text>"PRIORITY_REVIEW"</text></outputEntry>
+        <outputEntry id="Rule_4_Out_2"><text>"High fever in a vulnerable age group"</text></outputEntry>
+        <outputEntry id="Rule_4_Out_3"><text>"Within 2 hours"</text></outputEntry>
+      </rule>
+      <rule id="Rule_5">
+        <description></description>
+        <inputEntry id="Rule_5_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_3"><text>[5..7]</text></inputEntry>
+        <inputEntry id="Rule_5_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_5_Out_1"><text>"PRIORITY_REVIEW"</text></outputEntry>
+        <outputEntry id="Rule_5_Out_2"><text>"Moderate pain (5-7)"</text></outputEntry>
+        <outputEntry id="Rule_5_Out_3"><text>"Within 4 hours"</text></outputEntry>
+      </rule>
+      <rule id="Rule_6">
+        <description></description>
+        <inputEntry id="Rule_6_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_6_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_6_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_6_In_4"><text>true</text></inputEntry>
+        <inputEntry id="Rule_6_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_6_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_6_Out_1"><text>"PRIORITY_REVIEW"</text></outputEntry>
+        <outputEntry id="Rule_6_Out_2"><text>"High fever"</text></outputEntry>
+        <outputEntry id="Rule_6_Out_3"><text>"Within 4 hours"</text></outputEntry>
+      </rule>
+      <rule id="Rule_7">
+        <description></description>
+        <inputEntry id="Rule_7_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_7_In_6"><text>&gt; 14</text></inputEntry>
+        <outputEntry id="Rule_7_Out_1"><text>"PRIORITY_REVIEW"</text></outputEntry>
+        <outputEntry id="Rule_7_Out_2"><text>"Symptoms lasting more than 14 days"</text></outputEntry>
+        <outputEntry id="Rule_7_Out_3"><text>"Within 24 hours"</text></outputEntry>
+      </rule>
+      <rule id="Rule_8">
+        <description>Catch-all</description>
+        <inputEntry id="Rule_8_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_3"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_4"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_5"><text>-</text></inputEntry>
+        <inputEntry id="Rule_8_In_6"><text>-</text></inputEntry>
+        <outputEntry id="Rule_8_Out_1"><text>"ROUTINE"</text></outputEntry>
+        <outputEntry id="Rule_8_Out_2"><text>"No urgency indicators"</text></outputEntry>
+        <outputEntry id="Rule_8_Out_3"><text>"Next available appointment"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_triage-category" dmnElementRef="triage-category">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
