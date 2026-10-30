@@ -1,0 +1,6 @@
+{
+  "timestamp": "2026-11-02T10:25:00.000+00:00",
+  "status": 503,
+  "error": "Service Unavailable",
+  "path": "/payments/api/v1/charges"
+}

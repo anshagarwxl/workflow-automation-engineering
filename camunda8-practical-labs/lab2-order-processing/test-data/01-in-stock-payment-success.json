@@ -1,0 +1,12 @@
+{
+  "_description": "Stock available and payment succeeds (2 x headphones, standard delivery)",
+  "_expectedRoute": "Validate -> In stock -> DMN LOW -> no verification -> Payment AUTHORISED -> Fulfil -> Confirmation",
+  "_expectedOutcome": "FULFILLED",
+  "orderId": "ORD-2001",
+  "customerRef": "CUST-2001",
+  "customerCategory": "REGULAR",
+  "productId": "SKU-HEADPHONES",
+  "quantity": 2,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "tok_test_visa_success"
+}

@@ -1,0 +1,6 @@
+{
+  "paymentStatus": "AUTHORISED",
+  "paymentChargeId": "CHG-70001",
+  "paymentDeclineReason": null,
+  "paymentProcessedAt": "2026-11-02T10:20:11.456Z"
+}

@@ -1,0 +1,12 @@
+{
+  "_description": "NEW customer ordering INR 58,998.82 (>= 25,000) -> manual verification; reject it in Tasklist",
+  "_expectedRoute": "Validate -> DMN HIGH -> Manually verify order (REJECT) -> Notify: cancelled after review",
+  "_expectedOutcome": "CANCELLED_AFTER_REVIEW",
+  "orderId": "ORD-2007",
+  "customerRef": "CUST-2007",
+  "customerCategory": "NEW",
+  "productId": "SKU-PHONE",
+  "quantity": 1,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "tok_test_visa_success"
+}

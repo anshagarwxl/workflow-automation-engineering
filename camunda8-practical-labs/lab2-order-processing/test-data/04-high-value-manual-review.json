@@ -1,0 +1,12 @@
+{
+  "_description": "2 x Laptop Pro = INR 2,12,397.64 (>= 1,00,000) -> manual verification; approve it in Tasklist",
+  "_expectedRoute": "Validate -> In stock -> DMN HIGH -> Manually verify order (APPROVE) -> Payment AUTHORISED -> Fulfil",
+  "_expectedOutcome": "FULFILLED",
+  "orderId": "ORD-2004",
+  "customerRef": "CUST-2004",
+  "customerCategory": "REGULAR",
+  "productId": "SKU-LAPTOP-PRO",
+  "quantity": 2,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "tok_test_mastercard_success"
+}

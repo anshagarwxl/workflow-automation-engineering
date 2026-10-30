@@ -1,0 +1,174 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_1",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Place an order\nSynthetic data only. Use a **test payment token** - never a card number.\n\nTokens: `tok_test_visa_success`, `tok_test_mastercard_success`, `tok_test_card_declined`, `tok_test_insufficient_funds`."
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_2",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "orderId",
+      "label": "Order ID",
+      "description": "Format ORD-0000",
+      "validate": {
+        "required": true,
+        "pattern": "^ORD-[0-9]{4}$"
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_3",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "customerRef",
+      "label": "Customer reference",
+      "description": "Format CUST-0000",
+      "validate": {
+        "required": true,
+        "pattern": "^CUST-[0-9]{4}$"
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_4",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "customerCategory",
+      "label": "Customer category",
+      "values": [
+        {
+          "label": "New",
+          "value": "NEW"
+        },
+        {
+          "label": "Regular",
+          "value": "REGULAR"
+        },
+        {
+          "label": "Premium",
+          "value": "PREMIUM"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_5",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "productId",
+      "label": "Product",
+      "values": [
+        {
+          "label": "Wireless Headphones (2,499)",
+          "value": "SKU-HEADPHONES"
+        },
+        {
+          "label": "Mechanical Keyboard (3,999)",
+          "value": "SKU-KEYBOARD"
+        },
+        {
+          "label": "27in Monitor (18,999)",
+          "value": "SKU-MONITOR"
+        },
+        {
+          "label": "Smartphone X (49,999)",
+          "value": "SKU-PHONE"
+        },
+        {
+          "label": "Graphics Card (64,999)",
+          "value": "SKU-GPU-RTX"
+        },
+        {
+          "label": "Laptop Pro 14 (89,999)",
+          "value": "SKU-LAPTOP-PRO"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "number",
+      "id": "Field_number_6",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "quantity",
+      "label": "Quantity",
+      "validate": {
+        "required": true,
+        "min": 1,
+        "max": 20
+      }
+    },
+    {
+      "type": "select",
+      "id": "Field_select_7",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "deliveryPreference",
+      "label": "Delivery",
+      "values": [
+        {
+          "label": "Standard (3-5 days)",
+          "value": "STANDARD"
+        },
+        {
+          "label": "Express (next day)",
+          "value": "EXPRESS"
+        },
+        {
+          "label": "Same day",
+          "value": "SAME_DAY"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_8",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "paymentToken",
+      "label": "Payment token (mock)",
+      "validate": {
+        "required": true,
+        "pattern": "^tok_test_[a-z_]+$"
+      }
+    }
+  ],
+  "type": "default",
+  "id": "order-placement",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}

@@ -1,0 +1,12 @@
+{
+  "_description": "Mock gateway declines the card token (premium customer, express delivery)",
+  "_expectedRoute": "Validate -> In stock -> DMN HIGH -> Payment DECLINED -> Notify: payment declined",
+  "_expectedOutcome": "PAYMENT_DECLINED",
+  "orderId": "ORD-2003",
+  "customerRef": "CUST-2003",
+  "customerCategory": "PREMIUM",
+  "productId": "SKU-KEYBOARD",
+  "quantity": 1,
+  "deliveryPreference": "EXPRESS",
+  "paymentToken": "tok_test_card_declined"
+}

@@ -1,0 +1,10 @@
+{
+  "chargeId": "CHG-70002",
+  "orderId": "ORD-2003",
+  "status": "DECLINED",
+  "declineReason": "CARD_DECLINED",
+  "amount": 4867.82,
+  "currency": "INR",
+  "processedAt": "2026-11-02T10:21:40.002Z",
+  "idempotentReplay": false
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_OrderPriority" name="Order Priority" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.40.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.8.0">
+  <decision id="order-priority" name="Order priority">
+    <description>Educational order-priority rules. Hit policy FIRST (top-down, first match wins).</description>
+    <decisionTable id="order-priority_table" hitPolicy="FIRST">
+      <input id="Input_1" label="Order value (INR)">
+        <inputExpression id="InputExpression_1" typeRef="number">
+          <text>orderTotal</text>
+        </inputExpression>
+      </input>
+      <input id="Input_2" label="Customer category">
+        <inputExpression id="InputExpression_2" typeRef="string">
+          <text>customerCategory</text>
+        </inputExpression>
+      </input>
+      <input id="Input_3" label="Delivery preference">
+        <inputExpression id="InputExpression_3" typeRef="string">
+          <text>deliveryPreference</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" name="priority" label="Priority" typeRef="string">
+        <outputValues id="OutputValues_1">
+          <text>"CRITICAL","HIGH","MEDIUM","LOW"</text>
+        </outputValues>
+      </output>
+      <output id="Output_2" name="fulfilmentSlaHours" label="Dispatch SLA (hours)" typeRef="number">
+      </output>
+      <output id="Output_3" name="reason" label="Reason" typeRef="string">
+      </output>
+      <rule id="Rule_1">
+        <description>Same-day always wins</description>
+        <inputEntry id="Rule_1_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_1_In_3"><text>"SAME_DAY"</text></inputEntry>
+        <outputEntry id="Rule_1_Out_1"><text>"CRITICAL"</text></outputEntry>
+        <outputEntry id="Rule_1_Out_2"><text>6</text></outputEntry>
+        <outputEntry id="Rule_1_Out_3"><text>"Same-day delivery requested"</text></outputEntry>
+      </rule>
+      <rule id="Rule_2">
+        <description></description>
+        <inputEntry id="Rule_2_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_2_In_2"><text>"PREMIUM"</text></inputEntry>
+        <inputEntry id="Rule_2_In_3"><text>"EXPRESS"</text></inputEntry>
+        <outputEntry id="Rule_2_Out_1"><text>"HIGH"</text></outputEntry>
+        <outputEntry id="Rule_2_Out_2"><text>12</text></outputEntry>
+        <outputEntry id="Rule_2_Out_3"><text>"Premium customer with express delivery"</text></outputEntry>
+      </rule>
+      <rule id="Rule_3">
+        <description></description>
+        <inputEntry id="Rule_3_In_1"><text>&gt;= 50000</text></inputEntry>
+        <inputEntry id="Rule_3_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_3_In_3"><text>-</text></inputEntry>
+        <outputEntry id="Rule_3_Out_1"><text>"HIGH"</text></outputEntry>
+        <outputEntry id="Rule_3_Out_2"><text>24</text></outputEntry>
+        <outputEntry id="Rule_3_Out_3"><text>"High-value order (&gt;= 50,000)"</text></outputEntry>
+      </rule>
+      <rule id="Rule_4">
+        <description></description>
+        <inputEntry id="Rule_4_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_4_In_3"><text>"EXPRESS"</text></inputEntry>
+        <outputEntry id="Rule_4_Out_1"><text>"MEDIUM"</text></outputEntry>
+        <outputEntry id="Rule_4_Out_2"><text>24</text></outputEntry>
+        <outputEntry id="Rule_4_Out_3"><text>"Express delivery"</text></outputEntry>
+      </rule>
+      <rule id="Rule_5">
+        <description></description>
+        <inputEntry id="Rule_5_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_5_In_2"><text>"PREMIUM"</text></inputEntry>
+        <inputEntry id="Rule_5_In_3"><text>-</text></inputEntry>
+        <outputEntry id="Rule_5_Out_1"><text>"MEDIUM"</text></outputEntry>
+        <outputEntry id="Rule_5_Out_2"><text>48</text></outputEntry>
+        <outputEntry id="Rule_5_Out_3"><text>"Premium customer, standard delivery"</text></outputEntry>
+      </rule>
+      <rule id="Rule_6">
+        <description>Catch-all</description>
+        <inputEntry id="Rule_6_In_1"><text>-</text></inputEntry>
+        <inputEntry id="Rule_6_In_2"><text>-</text></inputEntry>
+        <inputEntry id="Rule_6_In_3"><text>-</text></inputEntry>
+        <outputEntry id="Rule_6_Out_1"><text>"LOW"</text></outputEntry>
+        <outputEntry id="Rule_6_Out_2"><text>72</text></outputEntry>
+        <outputEntry id="Rule_6_Out_3"><text>"Standard order"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="DMNDiagram_1">
+      <dmndi:DMNShape id="DMNShape_order-priority" dmnElementRef="order-priority">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,38 @@
+### Direct call to the mock payment gateway (same request the REST Connector sends)
+POST http://localhost:8090/payments/api/v1/charges
+Content-Type: application/json
+Idempotency-Key: ORD-2001
+
+< ./payment-charge.request.json
+
+### Declined token
+POST http://localhost:8090/payments/api/v1/charges
+Content-Type: application/json
+Idempotency-Key: ORD-9999
+
+{"orderId": "ORD-9999", "amount": 100, "currency": "INR", "paymentToken": "tok_test_card_declined", "customerRef": "CUST-9999"}
+
+### Start an order through the lab app
+POST http://localhost:8092/api/process-instances
+Content-Type: application/json
+
+< ./start-instance.request.json
+
+### Start an order through the Camunda 8 REST API (v2)
+POST http://localhost:8080/v2/process-instances
+Content-Type: application/json
+
+< ./camunda-rest-create-instance.request.json
+
+### Payment outage on / off
+PUT http://localhost:8090/admin/faults/payment?mode=DOWN
+###
+PUT http://localhost:8090/admin/faults/payment?mode=UP
+
+### Inventory outage inside the job worker on / off
+PUT http://localhost:8092/admin/worker-faults/inventory?mode=DOWN
+###
+PUT http://localhost:8092/admin/worker-faults/inventory?mode=UP
+
+### Live results table
+GET http://localhost:8092/api/scenarios/results.md

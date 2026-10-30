@@ -1,0 +1,12 @@
+{
+  "_description": "Quantity 0 and a raw card number instead of a token: rejected by validation",
+  "_expectedRoute": "Validate (orderValid=false) -> Notify: order rejected",
+  "_expectedOutcome": "REJECTED_INVALID",
+  "orderId": "ORD-2006",
+  "customerRef": "CUST-2006",
+  "customerCategory": "REGULAR",
+  "productId": "SKU-HEADPHONES",
+  "quantity": 0,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "4111 1111 1111 1111"
+}

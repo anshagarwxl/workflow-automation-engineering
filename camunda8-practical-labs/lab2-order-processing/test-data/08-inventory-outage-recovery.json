@@ -1,0 +1,13 @@
+{
+  "_manualStartOnly": true,
+  "_description": "Alternative failure: FIRST set the inventory dependency of the worker DOWN (PUT http://localhost:8092/admin/worker-faults/inventory?mode=DOWN), then start. Worker retries 3x then incident. Set mode=UP and retry in Operate",
+  "_expectedRoute": "Validate (INCIDENT) -> [inventory UP + retry] -> In stock -> Payment AUTHORISED -> Fulfil",
+  "_expectedOutcome": "FULFILLED",
+  "orderId": "ORD-2008",
+  "customerRef": "CUST-2008",
+  "customerCategory": "PREMIUM",
+  "productId": "SKU-HEADPHONES",
+  "quantity": 1,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "tok_test_visa_success"
+}

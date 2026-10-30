@@ -1,0 +1,11 @@
+[
+  {"name": "S01 regular, standard, 5,897.64", "input": {"orderTotal": 5897.64, "customerCategory": "REGULAR", "deliveryPreference": "STANDARD"}, "expected": {"priority": "LOW", "fulfilmentSlaHours": 72}},
+  {"name": "S03 premium, express", "input": {"orderTotal": 4867.82, "customerCategory": "PREMIUM", "deliveryPreference": "EXPRESS"}, "expected": {"priority": "HIGH", "fulfilmentSlaHours": 12}},
+  {"name": "S04 regular, standard, 2,12,397.64", "input": {"orderTotal": 212397.64, "customerCategory": "REGULAR", "deliveryPreference": "STANDARD"}, "expected": {"priority": "HIGH", "fulfilmentSlaHours": 24}},
+  {"name": "S05 regular, same day", "input": {"orderTotal": 22717.82, "customerCategory": "REGULAR", "deliveryPreference": "SAME_DAY"}, "expected": {"priority": "CRITICAL", "fulfilmentSlaHours": 6}},
+  {"name": "S07 new customer, 58,998.82", "input": {"orderTotal": 58998.82, "customerCategory": "NEW", "deliveryPreference": "STANDARD"}, "expected": {"priority": "HIGH"}},
+  {"name": "Regular, express, low value", "input": {"orderTotal": 2000, "customerCategory": "REGULAR", "deliveryPreference": "EXPRESS"}, "expected": {"priority": "MEDIUM", "fulfilmentSlaHours": 24}},
+  {"name": "Premium, standard, low value", "input": {"orderTotal": 2000, "customerCategory": "PREMIUM", "deliveryPreference": "STANDARD"}, "expected": {"priority": "MEDIUM", "fulfilmentSlaHours": 48}},
+  {"name": "Boundary: exactly 50,000", "input": {"orderTotal": 50000, "customerCategory": "NEW", "deliveryPreference": "STANDARD"}, "expected": {"priority": "HIGH"}},
+  {"name": "Boundary: 49,999.99", "input": {"orderTotal": 49999.99, "customerCategory": "NEW", "deliveryPreference": "STANDARD"}, "expected": {"priority": "LOW"}}
+]

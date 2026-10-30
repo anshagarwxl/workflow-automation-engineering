@@ -1,0 +1,13 @@
+{
+  "_manualStartOnly": true,
+  "_description": "FIRST set payment mock DOWN (PUT http://localhost:8090/admin/faults/payment?mode=DOWN), then start. Connector retries 3x (10 s back-off) and raises an incident. Set mode=UP and retry in Operate",
+  "_expectedRoute": "Validate -> DMN CRITICAL -> Process payment (INCIDENT) -> [service UP + retry] -> AUTHORISED -> Fulfil",
+  "_expectedOutcome": "FULFILLED",
+  "orderId": "ORD-2005",
+  "customerRef": "CUST-2005",
+  "customerCategory": "REGULAR",
+  "productId": "SKU-MONITOR",
+  "quantity": 1,
+  "deliveryPreference": "SAME_DAY",
+  "paymentToken": "tok_test_visa_success"
+}

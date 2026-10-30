@@ -1,0 +1,10 @@
+{
+  "chargeId": "CHG-70001",
+  "orderId": "ORD-2001",
+  "status": "AUTHORISED",
+  "declineReason": null,
+  "amount": 5897.64,
+  "currency": "INR",
+  "processedAt": "2026-11-02T10:20:11.456Z",
+  "idempotentReplay": false
+}

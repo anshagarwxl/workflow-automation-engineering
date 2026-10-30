@@ -1,0 +1,7 @@
+{
+  "orderId": "ORD-2001",
+  "amount": 5897.64,
+  "currency": "INR",
+  "paymentToken": "tok_test_visa_success",
+  "customerRef": "CUST-2001"
+}

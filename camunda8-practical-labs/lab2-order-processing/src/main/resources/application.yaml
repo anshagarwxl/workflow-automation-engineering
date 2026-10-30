@@ -1,0 +1,37 @@
+server:
+  port: 8092
+
+spring:
+  application:
+    name: lab2-order-processing
+
+camunda:
+  client:
+    mode: self-managed
+    # Camunda 8 Run (c8run) defaults. For the Docker Compose distribution use rest-address http://localhost:8088
+    rest-address: http://localhost:8080
+    grpc-address: http://localhost:26500
+    auth:
+      # c8run 8.8 does not protect the API by default. If you get HTTP 401, switch to:
+      #   method: basic / username: demo / password: demo
+      method: none
+
+lab:
+  process-id: order-processing-process
+  outcome-variable: finalOutcome
+  # Docker-based Camunda: http://host.docker.internal:8090 (empty = BPMN default http://localhost:8090)
+  mock-api-base-url:
+  report-variables:
+    - orderId
+    - orderValid
+    - stockStatus
+    - orderTotal
+    - priorityDecision
+    - verificationDecision
+    - paymentStatus
+    - paymentDeclineReason
+    - shipmentId
+
+logging:
+  level:
+    edu.srmist.camunda: INFO

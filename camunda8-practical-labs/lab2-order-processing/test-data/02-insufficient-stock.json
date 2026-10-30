@@ -1,0 +1,12 @@
+{
+  "_description": "5 graphics cards requested but only 2 in stock",
+  "_expectedRoute": "Validate -> Insufficient stock -> Notify: out of stock",
+  "_expectedOutcome": "OUT_OF_STOCK",
+  "orderId": "ORD-2002",
+  "customerRef": "CUST-2002",
+  "customerCategory": "REGULAR",
+  "productId": "SKU-GPU-RTX",
+  "quantity": 5,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "tok_test_visa_success"
+}

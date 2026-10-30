@@ -1,0 +1,9 @@
+{
+  "orderId": "ORD-2001",
+  "customerRef": "CUST-2001",
+  "customerCategory": "REGULAR",
+  "productId": "SKU-HEADPHONES",
+  "quantity": 2,
+  "deliveryPreference": "STANDARD",
+  "paymentToken": "tok_test_visa_success"
+}

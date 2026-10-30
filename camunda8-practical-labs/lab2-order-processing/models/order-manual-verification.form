@@ -1,0 +1,106 @@
+{
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_text_9",
+      "layout": {
+        "row": "r1",
+        "columns": null
+      },
+      "text": "## Manual order verification\nOrder **{{orderId}}** from **{{customerRef}}** ({{customerCategory}})\n\n{{quantity}} x {{productName}} - total **INR {{orderTotal}}**, priority **{{priorityDecision.priority}}** ({{priorityDecision.reason}}).\n\nOrders of 1,00,000 or more, and orders of 25,000 or more from NEW customers, need a manual check before payment."
+    },
+    {
+      "type": "number",
+      "id": "Field_number_10",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "orderTotal",
+      "label": "Order total (INR)",
+      "decimalDigits": 2,
+      "disabled": true
+    },
+    {
+      "type": "number",
+      "id": "Field_number_11",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "quantity",
+      "label": "Quantity",
+      "disabled": true
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_12",
+      "layout": {
+        "row": "r2",
+        "columns": null
+      },
+      "key": "deliveryPreference",
+      "label": "Delivery",
+      "disabled": true
+    },
+    {
+      "type": "radio",
+      "id": "Field_radio_13",
+      "layout": {
+        "row": "r3",
+        "columns": null
+      },
+      "key": "verificationDecision",
+      "label": "Decision",
+      "values": [
+        {
+          "label": "Approve - continue to payment",
+          "value": "APPROVE"
+        },
+        {
+          "label": "Reject - cancel the order",
+          "value": "REJECT"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textfield",
+      "id": "Field_textfield_14",
+      "layout": {
+        "row": "r4",
+        "columns": null
+      },
+      "key": "verifiedBy",
+      "label": "Verified by",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "Field_textarea_15",
+      "layout": {
+        "row": "r5",
+        "columns": null
+      },
+      "key": "verificationNotes",
+      "label": "Notes",
+      "validate": {
+        "required": true,
+        "maxLength": 500
+      }
+    }
+  ],
+  "type": "default",
+  "id": "order-manual-verification",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 18
+}
