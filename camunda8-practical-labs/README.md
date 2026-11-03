@@ -10,6 +10,10 @@ Part of [workflow-automation-engineering](../README.md). Three complete workflow
 
 All data is **synthetic**. No real payment credentials, secrets or patient data are used anywhere; the workers actively reject real-looking identifiers (card numbers, real names).
 
+## Presentation
+
+[presentation/PBJ-2-Camunda-8-Labs.pptx](presentation/PBJ-2-Camunda-8-Labs.pptx) – 14-slide deck covering the brief, architecture, each lab, failure handling, incident recovery and verification, with speaker notes on every slide.
+
 ## Architecture
 
 ```
@@ -44,6 +48,7 @@ labN-*/
   scripts/               run-scenarios.sh / .ps1 and fault toggles
   docs/                  REPORT.md, process-variables.md, dmn-rules.md, test-cases.md, images/, screenshots/
 docs/SETUP.md            installing and running Camunda 8 Run, Modeler, the apps
+presentation/            PBJ-2 slide deck (.pptx, with speaker notes)
 ```
 
 ## Quick start
