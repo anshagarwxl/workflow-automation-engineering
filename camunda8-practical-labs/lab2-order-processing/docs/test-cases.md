@@ -24,9 +24,18 @@ Each row is one file in [../test-data](../test-data) (the JSON holds the full in
 
 ## Execution results
 
-<!-- Paste the output of GET http://localhost:8092/api/scenarios/results.md here after running the scenarios. -->
+Executed live on **10 Nov 2026** on a MacBook (macOS) against **Camunda 8 Run 8.8.33** (Zeebe + Operate + Tasklist + Connectors on `localhost:8080`), models opened and deployed from **Camunda Desktop Modeler 5.49.0**. Table produced by `GET http://localhost:8092/api/scenarios/results.md`; the user tasks were completed in Tasklist and incidents were resolved in Operate as described per scenario. Screenshots: [screenshots/](screenshots/).
 
-_Not executed yet – paste the live results table here._
+| Scenario | Process instance | Description | Expected outcome | Actual outcome | Status | Key variables |
+|---|---|---|---|---|---|---|
+| 01-in-stock-payment-success | 2251799813688372 | Stock available and payment succeeds (2 x headphones, standard delivery) | FULFILLED | FULFILLED | PASS | orderId=ORD-2001<br>orderValid=true<br>stockStatus=IN_STOCK<br>orderTotal=5897.64<br>priorityDecision={"priority":"LOW","fulfilmentSlaHours":72,"reason":"Standard order"}<br>paymentStatus=AUTHORISED<br>paymentDeclineReason=null<br>shipmentId=SHP-2001 |
+| 02-insufficient-stock | 2251799813688387 | 5 graphics cards requested but only 2 in stock | OUT_OF_STOCK | OUT_OF_STOCK | PASS | orderId=ORD-2002<br>orderValid=true<br>stockStatus=INSUFFICIENT_STOCK<br>orderTotal=383494.1 |
+| 03-payment-declined | 2251799813688401 | Mock gateway declines the card token (premium customer, express delivery) | PAYMENT_DECLINED | PAYMENT_DECLINED | PASS | orderId=ORD-2003<br>orderValid=true<br>stockStatus=IN_STOCK<br>orderTotal=4867.82<br>priorityDecision={"priority":"HIGH","fulfilmentSlaHours":12,"reason":"Premium customer with express delivery"}<br>paymentStatus=DECLINED<br>paymentDeclineReason=CARD_DECLINED |
+| 04-high-value-manual-review | 2251799813688453 | 2 x Laptop Pro = INR 2,12,397.64 (>= 1,00,000) -> manual verification; approve it in Tasklist | FULFILLED | FULFILLED | PASS | orderId=ORD-2004<br>orderValid=true<br>stockStatus=IN_STOCK<br>orderTotal=212397.64<br>priorityDecision={"priority":"HIGH","fulfilmentSlaHours":24,"reason":"High-value order (>= 50,000)"}<br>verificationDecision=APPROVE<br>paymentStatus=AUTHORISED<br>paymentDeclineReason=null<br>shipmentId=SHP-2004 |
+| 06-invalid-order | 2251799813688549 | Quantity 0 and a raw card number instead of a token: rejected by validation | REJECTED_INVALID | REJECTED_INVALID | PASS | orderId=ORD-2006<br>orderValid=false<br>stockStatus=NOT_CHECKED |
+| 07-new-customer-review-rejected | 2251799813688597 | NEW customer ordering INR 58,998.82 (>= 25,000) -> manual verification; reject it in Tasklist | CANCELLED_AFTER_REVIEW | CANCELLED_AFTER_REVIEW | PASS | orderId=ORD-2007<br>orderValid=true<br>stockStatus=IN_STOCK<br>orderTotal=58998.82<br>priorityDecision={"priority":"HIGH","fulfilmentSlaHours":24,"reason":"High-value order (>= 50,000)"}<br>verificationDecision=REJECT |
+| 05-payment-service-outage-recovery | 2251799813688945 | FIRST set payment mock DOWN (PUT http://localhost:8090/admin/faults/payment?mode=DOWN), then start. Connector retries 3x (10 s back-off) and... | FULFILLED | FULFILLED | PASS | orderId=ORD-2005<br>orderValid=true<br>stockStatus=IN_STOCK<br>orderTotal=22717.82<br>priorityDecision={"priority":"CRITICAL","fulfilmentSlaHours":6,"reason":"Same-day delivery requested"}<br>paymentStatus=AUTHORISED<br>paymentDeclineReason=null<br>shipmentId=SHP-2005 |
+| 08-inventory-outage-recovery | 2251799813689190 | Alternative failure: FIRST set the inventory dependency of the worker DOWN (PUT http://localhost:8092/admin/worker-faults/inventory?mode=DOW... | FULFILLED | FULFILLED | PASS | orderId=ORD-2008<br>orderValid=true<br>stockStatus=IN_STOCK<br>orderTotal=2948.82<br>priorityDecision={"priority":"MEDIUM","fulfilmentSlaHours":48,"reason":"Premium customer, standard delivery"}<br>paymentStatus=AUTHORISED<br>paymentDeclineReason=null<br>shipmentId=SHP-2008 |
 
 ## Unit tests of the worker logic
 

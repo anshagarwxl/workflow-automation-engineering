@@ -22,9 +22,16 @@ Each row is one file in [../test-data](../test-data) (the JSON holds the full in
 
 ## Execution results
 
-<!-- Paste the output of GET http://localhost:8093/api/scenarios/results.md here after running the scenarios. -->
+Executed live on **10 Nov 2026** on a MacBook (macOS) against **Camunda 8 Run 8.8.33** (Zeebe + Operate + Tasklist + Connectors on `localhost:8080`), models opened and deployed from **Camunda Desktop Modeler 5.49.0**. Table produced by `GET http://localhost:8093/api/scenarios/results.md`; the user tasks were completed in Tasklist and incidents were resolved in Operate as described per scenario. Screenshots: [screenshots/](screenshots/).
 
-_Not executed yet – paste the live results table here._
+| Scenario | Process instance | Description | Expected outcome | Actual outcome | Status | Key variables |
+|---|---|---|---|---|---|---|
+| 01-routine-slot-available | 2251799813689476 | Routine request (pain 2, no red flags) with free morning slots in General Medicine | BOOKED | BOOKED | PASS | patientRef=SYN-PAT-3001<br>registrationValid=true<br>triage={"category":"ROUTINE","reason":"No urgency indicators","targetResponse":"Next available appointment"}<br>availableSlotCount=6<br>bookingStatus=CONFIRMED<br>bookingId=BKG-90001<br>appointmentTime=09:00-09:30 |
+| 02-priority-staff-review | 2251799813689495 | Moderate pain (6/10) -> priority staff review; choose 'Proceed to booking' in Tasklist | BOOKED | BOOKED | PASS | patientRef=SYN-PAT-3002<br>registrationValid=true<br>triage={"category":"PRIORITY_REVIEW","reason":"Moderate pain (5-7)","targetResponse":"Within 4 hours"}<br>priorityReviewOutcome=PROCEED_TO_BOOKING<br>availableSlotCount=4<br>bookingStatus=CONFIRMED<br>bookingId=BKG-90002<br>appointmentTime=14:00-14:30 |
+| 03-urgent-assessment | 2251799813689513 | Chest pain reported -> urgent assessment task for clinicians (complete it in Tasklist) | URGENT_ASSESSMENT | URGENT_ASSESSMENT | PASS | patientRef=SYN-PAT-3003<br>registrationValid=true<br>triage={"category":"URGENT_ASSESSMENT","reason":"Chest pain reported","targetResponse":"Immediate"} |
+| 04-no-slots-available | 2251799813689559 | Routine dermatology request; the mock calendar has no free dermatology slots -> staff task; choose 'Added to waiting list' | WAITLISTED | WAITLISTED | PASS | patientRef=SYN-PAT-3004<br>registrationValid=true<br>triage={"category":"ROUTINE","reason":"No urgency indicators","targetResponse":"Next available appointment"}<br>availableSlotCount=0<br>schedulingOutcome=WAITLISTED |
+| 06-invalid-registration | 2251799813689610 | Real-looking patient name instead of a synthetic reference and a date in the past -> registration rejected | REJECTED_INVALID | REJECTED_INVALID | PASS | patientRef=John Smith<br>registrationValid=false |
+| 05-scheduling-api-outage-recovery | 2251799813690028 | FIRST set scheduling mock DOWN (PUT http://localhost:8090/admin/faults/scheduling?mode=DOWN), then start. Slot lookup retries 3x (10 s back-... | BOOKED | BOOKED | PASS | patientRef=SYN-PAT-3005<br>registrationValid=true<br>triage={"category":"ROUTINE","reason":"No urgency indicators","targetResponse":"Next available appointment"}<br>availableSlotCount=10<br>bookingStatus=CONFIRMED<br>bookingId=BKG-90003<br>appointmentTime=09:00-09:30 |
 
 ## Unit tests of the worker logic
 

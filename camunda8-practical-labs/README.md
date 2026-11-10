@@ -106,7 +106,17 @@ Labs 2 and 3 are identical, using ports 8092 and 8093.
 | Deployment + execution evidence, Tasklist, Operate, incident resolution | [screenshots](lab1-loan-approval/docs/screenshots) | [screenshots](lab2-order-processing/docs/screenshots) | [screenshots](lab3-hospital-triage/docs/screenshots) |
 | Short report | [REPORT](lab1-loan-approval/docs/REPORT.md) | [REPORT](lab2-order-processing/docs/REPORT.md) | [REPORT](lab3-hospital-triage/docs/REPORT.md) |
 
-> Screenshots in `docs/screenshots/` must be captured from your own running implementation. Each folder contains a README listing exactly which screens to capture and the file name to save them under. Diagrams in `docs/images/` are rendered directly from the model files in this repository.
+## Live run on Desktop Modeler + Camunda 8 Run (10 Nov 2026)
+
+All three labs were deployed and executed on **Camunda 8 Run 8.8.33** with the models opened and deployed from **Camunda Desktop Modeler 5.49.0** (connection *c8run (local)*). Every scenario met its expected outcome:
+
+| Lab | Scenarios | Result | Failure / recovery shown |
+|---|---|---|---|
+| 1 Loan approval | 7 | **7 / 7 PASS** | credit API timeout + HTTP 500 caught → underwriter; worker incident fixed in Operate (variable edit + retry) |
+| 2 Order processing | 8 | **8 / 8 PASS** | payment gateway outage → connector retries → incident → retry; inventory outage → worker incident → retry |
+| 3 Hospital triage | 6 | **6 / 6 PASS** | scheduling API outage → incident → retry; no-slot path → staff task |
+
+Per-scenario tables (with process instance keys): each lab's `docs/test-cases.md`. Screenshots (Modeler, deployment, Operate, Tasklist, incidents): each lab's `docs/screenshots/`. Step-by-step script to repeat the demo live: [docs/DEMO.md](docs/DEMO.md). Diagrams in `docs/images/` are rendered directly from the model files.
 
 ## How the models were verified
 

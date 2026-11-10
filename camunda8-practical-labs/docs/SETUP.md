@@ -62,7 +62,7 @@ mvn -pl lab3-hospital-triage spring-boot:run   # :8093
 
 On start-up every lab app **deploys its BPMN, DMN and form files** (`@Deployment` annotation) and opens its job workers. Check the log for `Deployed:` lines, then open Operate → *Processes* to see the deployed definition.
 
-Alternatively deploy from Desktop Modeler: open the `.bpmn`, `.dmn` and `.form` files of a lab, click the rocket icon, choose *Camunda 8 Self-Managed*, cluster endpoint `http://localhost:26500` (or `http://localhost:8080` if your Modeler version deploys over REST), no authentication. Deploy the DMN and forms as well as the BPMN.
+Alternatively deploy from Desktop Modeler (5.4x ships a ready *c8run (local)* connection – just click the rocket icon and **Deploy**; older versions: open the `.bpmn`, `.dmn` and `.form` files of a lab, click the rocket icon, choose *Camunda 8 Self-Managed*, cluster endpoint `http://localhost:26500` (or `http://localhost:8080` if your Modeler version deploys over REST), no authentication). Deploy the DMN and forms as well as the BPMN. A full demo walkthrough is in [DEMO.md](DEMO.md).
 
 ## 5. Run the scenarios
 
