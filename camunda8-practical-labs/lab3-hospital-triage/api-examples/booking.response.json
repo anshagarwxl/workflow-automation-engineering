@@ -2,6 +2,11 @@
   "bookingId": "BKG-90001",
   "status": "CONFIRMED",
   "slotId": "GEN-20261105-0900",
+  "department": "GENERAL_MEDICINE",
+  "date": "2026-11-05",
+  "startTime": "09:00",
+  "endTime": "09:30",
+  "doctorCode": "DR-GEN-02",
   "patientRef": "SYN-PAT-3001",
   "urgencyCategory": "ROUTINE",
   "bookedAt": "2026-11-02T10:31:12.778Z"

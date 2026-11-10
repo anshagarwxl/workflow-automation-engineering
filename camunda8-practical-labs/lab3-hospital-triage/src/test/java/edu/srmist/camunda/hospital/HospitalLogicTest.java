@@ -60,17 +60,6 @@ class HospitalLogicTest {
   }
 
   @Test
-  void earliestSlotIsChosen() {
-    List<Map<String, Object>> slots =
-        List.of(
-            Map.of("slotId", "GEN-20261105-1000", "date", "2026-11-05", "startTime", "10:00"),
-            Map.of("slotId", "GEN-20261105-0900", "date", "2026-11-05", "startTime", "09:00"));
-    assertEquals(
-        "GEN-20261105-0900", AppointmentLogic.earliestSlot(slots).orElseThrow().get("slotId"));
-    assertTrue(AppointmentLogic.earliestSlot(List.of()).isEmpty());
-  }
-
-  @Test
   void staffSchedulingOutcomeBecomesFinalOutcome() {
     Map<String, Object> v = registration();
     v.put("notificationType", "STAFF_SCHEDULING");

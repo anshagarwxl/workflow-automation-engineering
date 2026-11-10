@@ -1,6 +1,6 @@
 # Lab 3 – End-to-End Hospital Appointment and Patient Triage Management
 
-A (synthetic) patient's appointment request is validated by a Spring Boot job worker, classified by an **educational** DMN triage table as *Routine*, *Priority Review* or *Urgent Assessment*, and routed: urgent cases go straight to a clinician task, priority cases to a staff review, routine cases to a mock scheduling API (REST Connector) and a booking worker. If no suitable slot exists, front-desk staff handle it in Tasklist. Operate is used for monitoring and to recover from a scheduling-service outage.
+A (synthetic) patient's appointment request is validated by a Spring Boot job worker, classified by an **educational** DMN triage table as *Routine*, *Priority Review* or *Urgent Assessment*, and routed: urgent cases go straight to a clinician task, priority cases to a staff review, routine cases to a mock scheduling API through two REST Connectors (slot lookup, then booking). If no suitable slot exists, front-desk staff handle it in Tasklist. Operate is used for monitoring and to recover from a scheduling-service outage.
 
 > Synthetic data only (`SYN-PAT-0000` references). The triage rules are for a simulated classroom workflow, not clinical guidance.
 
@@ -11,7 +11,7 @@ A (synthetic) patient's appointment request is validated by a Spring Boot job wo
 | BPMN process `hospital-appointment-process` | [models/hospital-appointment.bpmn](models/hospital-appointment.bpmn) |
 | DMN decision `triage-category` | [models/triage-category.dmn](models/triage-category.dmn) – rules: [docs/dmn-rules.md](docs/dmn-rules.md) |
 | Forms | [appointment-request](models/appointment-request.form) (start), [urgent-assessment](models/urgent-assessment.form), [priority-review](models/priority-review.form), [manual-scheduling](models/manual-scheduling.form) |
-| Job workers | [AppointmentWorkers.java](src/main/java/edu/srmist/camunda/hospital/worker/AppointmentWorkers.java), [SchedulingClient.java](src/main/java/edu/srmist/camunda/hospital/worker/SchedulingClient.java), [logic/](src/main/java/edu/srmist/camunda/hospital/logic) |
+| Job workers (compute only, no HTTP) | [AppointmentWorkers.java](src/main/java/edu/srmist/camunda/hospital/worker/AppointmentWorkers.java), [logic/](src/main/java/edu/srmist/camunda/hospital/logic) |
 | Mock scheduling API + connector config | [api-examples/](api-examples) (API source: [mock-services](../mock-services/src/main/java/edu/srmist/camunda/mock/scheduling)) |
 | Variables + routing | [docs/process-variables.md](docs/process-variables.md) |
 | Test cases | [docs/test-cases.md](docs/test-cases.md), inputs in [test-data/](test-data) |
@@ -27,7 +27,9 @@ A (synthetic) patient's appointment request is validated by a Spring Boot job wo
    * PRIORITY_REVIEW → **Priority staff review** (group `triage-nurses`) → proceed to booking, or refer to emergency.
    * ROUTINE → booking.
 5. **Retrieve available slots** – REST Connector `GET /scheduling/api/v1/slots?department=&date=&session=`.
-6. **Suitable slot available?** – yes → **Request appointment booking** (worker `appointment.request-booking` picks the earliest slot and POSTs `/bookings`) → *Booking confirmed?* → *Send appointment confirmation*. No slot, or the slot was taken (HTTP 409) → **Staff review: no suitable slot** (group `front-desk-staff`) → *Notify patient of next steps*.
+6. **Suitable slot available?** – yes → **Book earliest slot** – REST Connector `POST /scheduling/api/v1/bookings` with body `{slotId: availableSlots[1].slotId, …}` → *Send appointment confirmation*. An HTTP 409 (slot taken meanwhile) is turned into BPMN error `SLOT_TAKEN` by the connector's error expression and caught by a boundary event. No slot, or slot taken → **Staff review: no suitable slot** (group `front-desk-staff`) → *Notify patient of next steps*.
+
+> Every external URL in this lab is called by a **REST Connector** task (element template `io.camunda.connectors.HttpJson.v2`), never from Java code inside a service task.
 
 ## Run
 
@@ -64,7 +66,7 @@ Results: `curl http://localhost:8093/api/scenarios/results.md`.
 3. **Fix**: `./lab3-hospital-triage/scripts/fault.sh up`.
 4. **Retry** in Operate → slots returned → booking confirmed → `finalOutcome = BOOKED`.
 
-(If the outage is still on when the booking worker runs, that worker also retries with back-off and raises its own incident – recovered the same way.)
+(If the outage is still on when *Book earliest slot* runs, that connector also retries with back-off and raises its own incident – recovered the same way.)
 
 ## Tests
 

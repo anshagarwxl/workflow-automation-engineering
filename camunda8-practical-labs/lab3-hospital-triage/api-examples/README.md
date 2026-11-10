@@ -33,7 +33,34 @@ BPMN task `Task_RetrieveSlots` ("Retrieve available slots") – configuration as
 
 * Query parameters are built from process variables (`department`, `appointmentDate`, `preferredSession`).
 * HTTP 5xx / timeouts are retried 3 times with a 10 s back-off, then an incident is raised (scenario 05).
-* The booking itself is done by the Java worker `appointment.request-booking` (Spring `RestClient`), which picks the earliest returned slot and handles HTTP 409 by routing the case to staff.
+* The booking is a second REST Connector, described below.
+
+## Booking REST Connector
+
+BPMN task `Task_RequestBooking` ("Book earliest slot") – a second REST Connector (POST). No Java worker calls the scheduling API.
+
+| Property | Value |
+|---|---|
+| Task definition type | `io.camunda:http-json:1` |
+| Retries | `3` |
+| Input `authentication.type` | `noAuth` |
+| Input `method` | `POST` |
+| Input `url` | `=(if is defined(mockApiBaseUrl) then mockApiBaseUrl else "http://localhost:8090") + "/scheduling/api/v1/bookings"` |
+| Input `storeResponse` | `false` |
+| Input `connectionTimeoutInSeconds` | `5` |
+| Input `readTimeoutInSeconds` | `10` |
+| Input `body` | `={slotId: availableSlots[1].slotId, patientRef: patientRef, urgencyCategory: triage.category, requestedBy: "camunda-rest-connector"}` |
+| Input `ignoreNullValues` | `false` |
+| Header `elementTemplateVersion` | `11` |
+| Header `elementTemplateId` | `io.camunda.connectors.HttpJson.v2` |
+| Header `resultVariable` | `bookingResponse` |
+| Header `resultExpression` | `={bookingStatus: response.body.status, bookingId: response.body.bookingId, appointmentSlotId: response.body.slotId, appointmentDate: response.body.date, appointmentTime: response.body.startTime + "-" + response.body.endTime, doctorCode: response.body.doctorCode}` |
+| Header `errorExpression` | `=if error.code = "409" then bpmnError("SLOT_TAKEN", "Selected slot is no longer available", {bookingProblem: "HTTP 409 - slot already booked"}) else null` |
+| Header `retryBackoff` | `PT10S` |
+
+* The body takes the first (earliest) slot returned by the lookup: `availableSlots[1].slotId` (FEEL lists are 1-based).
+* **Result variable** `bookingResponse` keeps the full response; the **result expression** copies `bookingId`, date, time and doctor into process variables (connector result expressions only see `response`, so the mock returns the slot details in the booking response).
+* **Error expression**: HTTP 409 → BPMN error `SLOT_TAKEN`, caught by the boundary event *Slot taken (HTTP 409)* → staff review. Any other failure returns `null` → normal retries (3 × `PT10S`) → incident.
 
 ## Request / response files
 

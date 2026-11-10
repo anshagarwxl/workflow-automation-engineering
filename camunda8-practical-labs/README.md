@@ -29,9 +29,22 @@ All data is **synthetic**. No real payment credentials, secrets or patient data 
 
 * **BPMN** orchestrates each process; **DMN** (business rule task) makes the classification decision.
 * **External job workers** (Java 17, Spring Boot 3.5, `io.camunda:camunda-spring-boot-starter:8.8.x`) implement validation, pricing, booking, notifications.
-* **REST Connector** (`io.camunda:http-json:1`, Connector template `io.camunda.connectors.HttpJson.v2`) calls the external service.
+* **REST Connector** (`io.camunda:http-json:1`, Connector template `io.camunda.connectors.HttpJson.v2`) makes every external HTTP call – see the table below.
 * **mock-services** simulates the credit bureau, payment gateway and hospital scheduling system and can be switched DOWN/SLOW to create incidents.
 * **Tasklist** handles the human tasks (Camunda user tasks with linked Camunda Forms); **Operate** is used to monitor, diagnose incidents, edit variables and retry.
+
+## External calls use the REST Connector only
+
+Every call to an external URL is a BPMN service task with the **REST Connector** element template (`io.camunda.connectors.HttpJson.v2`, job type `io.camunda:http-json:1`), executed by the Connectors runtime bundled with Camunda 8 Run. No Java job worker calls a URL – workers only validate, calculate and build notifications.
+
+| Lab | BPMN task | Method + endpoint (mock-services :8090) | Result variable | Failure handling |
+|---|---|---|---|---|
+| 1 | Request credit assessment | `POST /credit-bureau/api/v1/assessments` | `creditCheckResponse` | error expression → BPMN error `CREDIT_API_ERROR` → underwriter |
+| 2 | Process payment | `POST /payments/api/v1/charges` | – (result expression) | 3 retries, 10 s back-off → incident |
+| 3 | Retrieve available slots | `GET /scheduling/api/v1/slots` | – (result expression) | 3 retries, 10 s back-off → incident |
+| 3 | Book earliest slot | `POST /scheduling/api/v1/bookings` | `bookingResponse` | HTTP 409 → BPMN error `SLOT_TAKEN` → staff; others → retries → incident |
+
+Open any of these tasks in Desktop Modeler: the properties panel shows the REST Connector fields (authentication, method, URL, headers, body, timeouts, result variable, result expression, error expression, retries).
 
 ## Repository layout
 
@@ -100,4 +113,4 @@ Labs 2 and 3 are identical, using ports 8092 and 8093.
 * All BPMN files pass `bpmnlint` with the **camunda-compat `camunda-cloud-8-8` rule set** (the same checks Desktop Modeler runs before deploying), including FEEL syntax of every expression.
 * Every DMN table is evaluated against the cases in `models/dmn-tests/*.json` (FEEL interpreter); the results are tabulated in each lab's `docs/dmn-rules.md`.
 * Every form validates against the official Camunda Forms JSON schema.
-* The worker logic is covered by JUnit tests (`mvn verify`).
+* The worker logic is covered by JUnit tests (`mvn verify`, 24 tests).

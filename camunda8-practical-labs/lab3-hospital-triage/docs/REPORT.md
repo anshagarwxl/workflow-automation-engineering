@@ -12,21 +12,21 @@ Automate a hospital appointment request with Camunda 8: register a synthetic pat
 |---|---|---|
 | Process `hospital-appointment-process` | BPMN on Zeebe 8.8 | orchestration, triage routing |
 | Decision `triage-category` | DMN decision table, hit policy FIRST | ROUTINE / PRIORITY_REVIEW / URGENT_ASSESSMENT |
-| Worker app `lab3-hospital-triage` (:8093) | Java 17, Spring Boot 3.5, Camunda Spring Boot starter 8.8, Spring `RestClient` | `appointment.validate-registration`, `appointment.request-booking`, `appointment.notify-patient`; deploys models |
-| REST Connector | `io.camunda:http-json:1` | `GET /scheduling/api/v1/slots` |
+| Worker app `lab3-hospital-triage` (:8093) | Java 17, Spring Boot 3.5, Camunda Spring Boot starter 8.8 | `appointment.validate-registration`, `appointment.notify-patient` (compute only, no HTTP); deploys models |
+| REST Connectors | `io.camunda:http-json:1` | `GET /scheduling/api/v1/slots`, `POST /scheduling/api/v1/bookings` |
 | Mock scheduling API (:8090) | Spring Boot `mock-services` | synthetic calendar, bookings (201/409), outage simulation |
 | Tasklist | Camunda user tasks + 3 forms | clinician assessment, priority review, manual scheduling |
 | Operate | – | monitoring, incident diagnosis, retry |
 
 ## 3. Implementation
 
-**BPMN.** *Appointment request received* (start form) → *Validate registration* → XOR *Registration valid?* → *Apply triage rules* (business rule task) → XOR *Triage category?* with three branches: urgent (user task *Immediate clinical assessment*, candidate group `triage-clinicians`, task priority 100), priority (user task *Priority staff review*, group `triage-nurses`, then XOR *Review outcome?*), routine (default). Routine and approved priority cases merge into *Retrieve available slots* (REST Connector) → XOR *Suitable slot available?* → *Request appointment booking* (worker) → XOR *Booking confirmed?* → *Send appointment confirmation*. No slot or a lost slot (HTTP 409) leads to the user task *Staff review: no suitable slot* (group `front-desk-staff`). Notification tasks share one job type with a `notificationType` input mapping.
+**BPMN.** *Appointment request received* (start form) → *Validate registration* → XOR *Registration valid?* → *Apply triage rules* (business rule task) → XOR *Triage category?* with three branches: urgent (user task *Immediate clinical assessment*, candidate group `triage-clinicians`, task priority 100), priority (user task *Priority staff review*, group `triage-nurses`, then XOR *Review outcome?*), routine (default). Routine and approved priority cases merge into *Retrieve available slots* (REST Connector) → XOR *Suitable slot available?* → *Book earliest slot* (REST Connector, POST) → *Send appointment confirmation*; an error boundary event catches `SLOT_TAKEN`. No slot or a lost slot (HTTP 409) leads to the user task *Staff review: no suitable slot* (group `front-desk-staff`). Notification tasks share one job type with a `notificationType` input mapping.
 
 **DMN.** Six inputs (chest pain, breathing difficulty, pain score, high fever, age, symptom duration) and eight FIRST-policy rules; red-flag rules first, catch-all ROUTINE last. See [dmn-rules.md](dmn-rules.md).
 
 **Job workers.** [`AppointmentWorkers`](../src/main/java/edu/srmist/camunda/hospital/worker/AppointmentWorkers.java):
 * *validate-registration* – [`RegistrationValidator`](../src/main/java/edu/srmist/camunda/hospital/logic/RegistrationValidator.java): synthetic `SYN-PAT-0000` reference only, age 0–120, known department/session, date not past and ≤ 90 days ahead (defaults to tomorrow), symptoms 3–500 chars, pain 0–10; normalises indicators to booleans so the DMN always receives typed values.
-* *request-booking* – picks the earliest slot ([`AppointmentLogic`](../src/main/java/edu/srmist/camunda/hospital/logic/AppointmentLogic.java)) and books it via [`SchedulingClient`](../src/main/java/edu/srmist/camunda/hospital/worker/SchedulingClient.java): 201 → CONFIRMED, 409 → SLOT_TAKEN (routed to staff), 5xx/unreachable → retryable job error with 10 s back-off.
+* No worker calls a URL: the booking is the REST Connector task *Book earliest slot* – body `{slotId: availableSlots[1].slotId, patientRef, urgencyCategory: triage.category}`; 201 → result expression sets `bookingStatus`, `bookingId`, `appointmentTime`, `doctorCode`; 409 → error expression raises BPMN error `SLOT_TAKEN` (boundary event → staff); 5xx/timeouts → 3 retries, `PT10S` back-off, then incident.
 * *notify-patient* – simulated SMS text and `finalOutcome`.
 
 **REST integration.** GET with query parameters built from variables (`department`, `appointmentDate`, `preferredSession`); result expression → `availableSlots`, `availableSlotCount`; 3 retries, `PT10S` back-off, then incident. Mock API description and examples: [../api-examples](../api-examples).
@@ -66,5 +66,5 @@ Static verification: BPMN lint with camunda-compat 8.8 (0 findings); DMN 12/12 s
 
 * No timer escalation if a priority review or urgent assessment is not picked up within its target time (a timer boundary event would add this).
 * Booked slots are held in memory by the mock service.
-* The booking worker takes the earliest slot; patient choice of slot is not modelled.
+* The booking connector takes the earliest slot; patient choice of slot is not modelled.
 * No authentication between worker and Camunda (Camunda 8 Run default); a real deployment would also need audit and data-protection controls.

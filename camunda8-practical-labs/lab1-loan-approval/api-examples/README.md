@@ -19,11 +19,13 @@ BPMN task `Task_CreditAssessment` ("Request credit assessment") uses the Camunda
 | Input `ignoreNullValues` | `false` |
 | Header `elementTemplateVersion` | `11` |
 | Header `elementTemplateId` | `io.camunda.connectors.HttpJson.v2` |
+| Header `resultVariable` | `creditCheckResponse` |
 | Header `resultExpression` | `={creditCheckStatus: "COMPLETED", creditAssessmentId: response.body.assessmentId, creditScore: response.body.creditScore, riskGrade: response.body.riskGrade, bureauStatus: response.body.bureauStatus, activeLoans: response.body.activeLoans, defaultsLast24Months: response.body.defaultsLast24Months}` |
 | Header `errorExpression` | `=if error != null then bpmnError("CREDIT_API_ERROR", "Credit assessment API failed: " + string(if error.message != null then error.message else "no details"), {creditCheckError: string(if error.message != null then error.message else "no details")}) else null` |
 | Header `retryBackoff` | `PT0S` |
 
 * **URL** – `mockApiBaseUrl` is optional; without it the connector calls `http://localhost:8090`.
+* **Result variable** `creditCheckResponse` stores the whole HTTP response (`status`, `headers`, `body`) – inspect it in Operate exactly as in the course tutorial.
 * **Result expression** maps the response body into process variables (see [`credit-assessment.result-variables.json`](credit-assessment.result-variables.json)).
 * **Error expression** turns *any* failure (HTTP 4xx/5xx, connection refused, the 5 s read timeout) into the BPMN error `CREDIT_API_ERROR` with variable `creditCheckError`. The error boundary event on the task catches it, sets `creditCheckStatus = "FAILED"` and routes the application to manual underwriting instead of leaving it stuck.
 

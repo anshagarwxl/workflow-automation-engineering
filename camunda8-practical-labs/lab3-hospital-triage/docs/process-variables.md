@@ -54,16 +54,17 @@ Process `hospital-appointment-process`. All patient data is synthetic.
 | `availableSlotCount` | Number | `6` | routes *Suitable slot available?* |
 | `slotLookupStatus` | String | `COMPLETED` | |
 
-## Set by *Request appointment booking* (worker `appointment.request-booking`)
+## Set by *Book earliest slot* (REST Connector result expression / `SLOT_TAKEN` boundary event)
 
 | Variable | Type | Example | Purpose |
 |---|---|---|---|
-| `bookingStatus` | String | `CONFIRMED` / `SLOT_TAKEN` | routes *Booking confirmed?* |
+| `bookingStatus` | String | `CONFIRMED` / `SLOT_TAKEN` | `SLOT_TAKEN` is set by the boundary event's output mapping |
+| `bookingResponse` | Context | `{status: 201, headers: {…}, body: {…}}` | full HTTP response (connector *Result variable*) |
 | `bookingId` | String | `BKG-90001` | scheduling-system reference |
 | `appointmentSlotId` | String | `GEN-20261105-0900` | booked slot |
 | `appointmentTime` | String | `09:00-09:30` | |
 | `doctorCode` | String | `DR-GEN-02` | synthetic clinician code |
-| `bookingProblem` | String | `SLOT_TAKEN: …` | reason when the slot was lost (HTTP 409) |
+| `bookingProblem` | String | `HTTP 409 - slot already booked` | reason when the slot was lost |
 
 ## Set by the notification tasks (worker `appointment.notify-patient`)
 
@@ -84,6 +85,6 @@ Process `hospital-appointment-process`. All patient data is synthetic.
 | | Routine | default |
 | Review outcome? | Refer to emergency | `=priorityReviewOutcome = "REFER_TO_EMERGENCY"` (default → proceed to booking) |
 | Suitable slot available? | Yes | `=availableSlotCount > 0` (default → staff review) |
-| Booking confirmed? | Confirmed | `=bookingStatus = "CONFIRMED"` (default → staff review) |
+| Error boundary on *Book earliest slot* | Slot taken (HTTP 409) | BPMN error code `SLOT_TAKEN` → staff review |
 
 Urgent cases never wait for the scheduling API – they go straight to a human, which is the safe design for the simulated scenario.

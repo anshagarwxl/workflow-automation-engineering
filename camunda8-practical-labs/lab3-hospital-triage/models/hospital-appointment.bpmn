@@ -120,19 +120,42 @@
       <bpmn:outgoing>Flow_SlotFound</bpmn:outgoing>
       <bpmn:outgoing>Flow_NoSlot</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Task_RequestBooking" name="Request appointment booking">
-      <bpmn:documentation>Job worker: chooses the earliest slot and books it through the scheduling API.</bpmn:documentation>
+    <bpmn:serviceTask id="Task_RequestBooking" name="Book earliest slot" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="11">
+      <bpmn:documentation>REST Connector (POST) to the mock scheduling API. Books the earliest returned slot (availableSlots[1]). HTTP 409 becomes BPMN error SLOT_TAKEN (staff review); HTTP 5xx / timeouts are retried 3 times with a 10 s back-off, then an incident is raised.</bpmn:documentation>
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="appointment.request-booking" retries="3" />
+        <zeebe:taskDefinition type="io.camunda:http-json:1" retries="3" />
+        <zeebe:ioMapping>
+        <zeebe:input source="noAuth" target="authentication.type" />
+        <zeebe:input source="POST" target="method" />
+        <zeebe:input source="=(if is defined(mockApiBaseUrl) then mockApiBaseUrl else &quot;http://localhost:8090&quot;) + &quot;/scheduling/api/v1/bookings&quot;" target="url" />
+        <zeebe:input source="false" target="storeResponse" />
+        <zeebe:input source="5" target="connectionTimeoutInSeconds" />
+        <zeebe:input source="10" target="readTimeoutInSeconds" />
+        <zeebe:input source="={slotId: availableSlots[1].slotId, patientRef: patientRef, urgencyCategory: triage.category, requestedBy: &quot;camunda-rest-connector&quot;}" target="body" />
+        <zeebe:input source="false" target="ignoreNullValues" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+        <zeebe:header key="elementTemplateVersion" value="11" />
+        <zeebe:header key="elementTemplateId" value="io.camunda.connectors.HttpJson.v2" />
+        <zeebe:header key="resultVariable" value="bookingResponse" />
+        <zeebe:header key="resultExpression" value="={bookingStatus: response.body.status, bookingId: response.body.bookingId, appointmentSlotId: response.body.slotId, appointmentDate: response.body.date, appointmentTime: response.body.startTime + &quot;-&quot; + response.body.endTime, doctorCode: response.body.doctorCode}" />
+        <zeebe:header key="errorExpression" value="=if error.code = &quot;409&quot; then bpmnError(&quot;SLOT_TAKEN&quot;, &quot;Selected slot is no longer available&quot;, {bookingProblem: &quot;HTTP 409 - slot already booked&quot;}) else null" />
+        <zeebe:header key="retryBackoff" value="PT10S" />
+        </zeebe:taskHeaders>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_SlotFound</bpmn:incoming>
       <bpmn:outgoing>Flow_10</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:exclusiveGateway id="Gateway_Booked" name="Booking confirmed?" default="Flow_BookedFailed">
-      <bpmn:incoming>Flow_10</bpmn:incoming>
-      <bpmn:outgoing>Flow_BookedOk</bpmn:outgoing>
-      <bpmn:outgoing>Flow_BookedFailed</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
+    <bpmn:boundaryEvent id="Boundary_SlotTaken" name="Slot taken (HTTP 409)" attachedToRef="Task_RequestBooking">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+        <zeebe:output source="=&quot;SLOT_TAKEN&quot;" target="bookingStatus" />
+        <zeebe:output source="=if is defined(bookingProblem) then bookingProblem else &quot;Slot no longer available&quot;" target="bookingProblem" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_SlotTaken</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="Boundary_SlotTaken_def" errorRef="Error_SlotTaken" />
+    </bpmn:boundaryEvent>
     <bpmn:serviceTask id="Task_NotifyBooked" name="Send appointment confirmation">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="appointment.notify-patient" retries="3" />
@@ -140,7 +163,7 @@
         <zeebe:input source="=&quot;BOOKING_CONFIRMED&quot;" target="notificationType" />
         </zeebe:ioMapping>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_BookedOk</bpmn:incoming>
+      <bpmn:incoming>Flow_10</bpmn:incoming>
       <bpmn:outgoing>Flow_11</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="End_Booked" name="Appointment booked">
@@ -148,7 +171,7 @@
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_MergeManual">
       <bpmn:incoming>Flow_NoSlot</bpmn:incoming>
-      <bpmn:incoming>Flow_BookedFailed</bpmn:incoming>
+      <bpmn:incoming>Flow_SlotTaken</bpmn:incoming>
       <bpmn:outgoing>Flow_12</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="UserTask_ManualScheduling" name="Staff review: no suitable slot">
@@ -215,17 +238,15 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=availableSlotCount &gt; 0</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_NoSlot" name="No" sourceRef="Gateway_SlotAvailable" targetRef="Gateway_MergeManual" />
-    <bpmn:sequenceFlow id="Flow_10" sourceRef="Task_RequestBooking" targetRef="Gateway_Booked" />
-    <bpmn:sequenceFlow id="Flow_BookedOk" name="Confirmed" sourceRef="Gateway_Booked" targetRef="Task_NotifyBooked">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bookingStatus = "CONFIRMED"</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_BookedFailed" name="Slot taken" sourceRef="Gateway_Booked" targetRef="Gateway_MergeManual" />
+    <bpmn:sequenceFlow id="Flow_10" sourceRef="Task_RequestBooking" targetRef="Task_NotifyBooked" />
+    <bpmn:sequenceFlow id="Flow_SlotTaken" sourceRef="Boundary_SlotTaken" targetRef="Gateway_MergeManual" />
     <bpmn:sequenceFlow id="Flow_11" sourceRef="Task_NotifyBooked" targetRef="End_Booked" />
     <bpmn:sequenceFlow id="Flow_12" sourceRef="Gateway_MergeManual" targetRef="UserTask_ManualScheduling" />
     <bpmn:sequenceFlow id="Flow_13" sourceRef="UserTask_ManualScheduling" targetRef="Task_NotifyStaffOutcome" />
     <bpmn:sequenceFlow id="Flow_14" sourceRef="Task_NotifyStaffOutcome" targetRef="End_StaffHandled" />
     <bpmn:sequenceFlow id="Flow_15" sourceRef="Task_NotifyInvalid" targetRef="End_Invalid" />
   </bpmn:process>
+  <bpmn:error id="Error_SlotTaken" name="Appointment slot taken" errorCode="SLOT_TAKEN" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="hospital-appointment-process">
       <bpmndi:BPMNShape id="StartEvent_RequestReceived_di" bpmnElement="StartEvent_RequestReceived">
@@ -283,29 +304,29 @@
       <bpmndi:BPMNShape id="Task_RequestBooking_di" bpmnElement="Task_RequestBooking">
         <dc:Bounds x="1625" y="110" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_Booked_di" bpmnElement="Gateway_Booked" isMarkerVisible="true">
-        <dc:Bounds x="1815" y="125" width="50" height="50" />
-        <bpmndi:BPMNLabel><dc:Bounds x="1728" y="95" width="100" height="27" /></bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Boundary_SlotTaken_di" bpmnElement="Boundary_SlotTaken">
+        <dc:Bounds x="1657" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1701" y="204" width="100" height="27" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_NotifyBooked_di" bpmnElement="Task_NotifyBooked">
-        <dc:Bounds x="1955" y="110" width="100" height="80" />
+        <dc:Bounds x="1790" y="110" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="End_Booked_di" bpmnElement="End_Booked">
-        <dc:Bounds x="2152" y="132" width="36" height="36" />
-        <bpmndi:BPMNLabel><dc:Bounds x="2120" y="174" width="100" height="27" /></bpmndi:BPMNLabel>
+        <dc:Bounds x="1987" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1955" y="174" width="100" height="27" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_MergeManual_di" bpmnElement="Gateway_MergeManual" isMarkerVisible="true">
-        <dc:Bounds x="1815" y="260" width="50" height="50" />
+        <dc:Bounds x="1650" y="260" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_ManualScheduling_di" bpmnElement="UserTask_ManualScheduling">
-        <dc:Bounds x="1955" y="245" width="100" height="80" />
+        <dc:Bounds x="1790" y="245" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_NotifyStaffOutcome_di" bpmnElement="Task_NotifyStaffOutcome">
-        <dc:Bounds x="2120" y="245" width="100" height="80" />
+        <dc:Bounds x="1955" y="245" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="End_StaffHandled_di" bpmnElement="End_StaffHandled">
-        <dc:Bounds x="2317" y="267" width="36" height="36" />
-        <bpmndi:BPMNLabel><dc:Bounds x="2285" y="309" width="100" height="27" /></bpmndi:BPMNLabel>
+        <dc:Bounds x="2152" y="267" width="36" height="36" />
+        <bpmndi:BPMNLabel><dc:Bounds x="2120" y="309" width="100" height="27" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Task_NotifyInvalid_di" bpmnElement="Task_NotifyInvalid">
         <dc:Bounds x="470" y="245" width="100" height="80" />
@@ -395,38 +416,32 @@
       <bpmndi:BPMNEdge id="Flow_NoSlot_di" bpmnElement="Flow_NoSlot">
         <di:waypoint x="1510" y="175" />
         <di:waypoint x="1510" y="285" />
-        <di:waypoint x="1815" y="285" />
+        <di:waypoint x="1650" y="285" />
         <bpmndi:BPMNLabel><dc:Bounds x="1516" y="223" width="80" height="14" /></bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10_di" bpmnElement="Flow_10">
         <di:waypoint x="1725" y="150" />
-        <di:waypoint x="1815" y="150" />
+        <di:waypoint x="1790" y="150" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_BookedOk_di" bpmnElement="Flow_BookedOk">
-        <di:waypoint x="1865" y="150" />
-        <di:waypoint x="1955" y="150" />
-        <bpmndi:BPMNLabel><dc:Bounds x="1873" y="128" width="80" height="14" /></bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_BookedFailed_di" bpmnElement="Flow_BookedFailed">
-        <di:waypoint x="1840" y="175" />
-        <di:waypoint x="1840" y="260" />
-        <bpmndi:BPMNLabel><dc:Bounds x="1846" y="210" width="80" height="14" /></bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_SlotTaken_di" bpmnElement="Flow_SlotTaken">
+        <di:waypoint x="1675" y="208" />
+        <di:waypoint x="1675" y="260" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11_di" bpmnElement="Flow_11">
-        <di:waypoint x="2055" y="150" />
-        <di:waypoint x="2152" y="150" />
+        <di:waypoint x="1890" y="150" />
+        <di:waypoint x="1987" y="150" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_12_di" bpmnElement="Flow_12">
-        <di:waypoint x="1865" y="285" />
-        <di:waypoint x="1955" y="285" />
+        <di:waypoint x="1700" y="285" />
+        <di:waypoint x="1790" y="285" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13_di" bpmnElement="Flow_13">
-        <di:waypoint x="2055" y="285" />
-        <di:waypoint x="2120" y="285" />
+        <di:waypoint x="1890" y="285" />
+        <di:waypoint x="1955" y="285" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_14_di" bpmnElement="Flow_14">
-        <di:waypoint x="2220" y="285" />
-        <di:waypoint x="2317" y="285" />
+        <di:waypoint x="2055" y="285" />
+        <di:waypoint x="2152" y="285" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_15_di" bpmnElement="Flow_15">
         <di:waypoint x="520" y="325" />

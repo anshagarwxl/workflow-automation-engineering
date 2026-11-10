@@ -36,6 +36,11 @@ public class SchedulingCalendar {
       String bookingId,
       String status,
       String slotId,
+      String department,
+      String date,
+      String startTime,
+      String endTime,
+      String doctorCode,
       String patientRef,
       String urgencyCategory,
       String bookedAt) {}
@@ -98,6 +103,11 @@ public class SchedulingCalendar {
             "BKG-" + sequence.incrementAndGet(),
             "CONFIRMED",
             slot.slotId(),
+            slot.department(),
+            slot.date(),
+            slot.startTime(),
+            slot.endTime(),
+            slot.doctorCode(),
             request.patientRef(),
             request.urgencyCategory(),
             Instant.now().toString());

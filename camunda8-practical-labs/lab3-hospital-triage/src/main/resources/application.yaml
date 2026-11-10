@@ -16,10 +16,6 @@ camunda:
       #   method: basic / username: demo / password: demo
       method: none
 
-lab3:
-  # Used by the booking worker (the REST connector uses the process variable mockApiBaseUrl or its BPMN default)
-  scheduling-base-url: http://localhost:8090
-
 lab:
   process-id: hospital-appointment-process
   outcome-variable: finalOutcome
@@ -34,6 +30,7 @@ lab:
     - bookingStatus
     - bookingId
     - appointmentTime
+    - bookingProblem
     - schedulingOutcome
 
 logging:

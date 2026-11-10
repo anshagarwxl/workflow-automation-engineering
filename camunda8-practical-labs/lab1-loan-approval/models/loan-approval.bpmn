@@ -40,6 +40,7 @@
         <zeebe:taskHeaders>
         <zeebe:header key="elementTemplateVersion" value="11" />
         <zeebe:header key="elementTemplateId" value="io.camunda.connectors.HttpJson.v2" />
+        <zeebe:header key="resultVariable" value="creditCheckResponse" />
         <zeebe:header key="resultExpression" value="={creditCheckStatus: &quot;COMPLETED&quot;, creditAssessmentId: response.body.assessmentId, creditScore: response.body.creditScore, riskGrade: response.body.riskGrade, bureauStatus: response.body.bureauStatus, activeLoans: response.body.activeLoans, defaultsLast24Months: response.body.defaultsLast24Months}" />
         <zeebe:header key="errorExpression" value="=if error != null then bpmnError(&quot;CREDIT_API_ERROR&quot;, &quot;Credit assessment API failed: &quot; + string(if error.message != null then error.message else &quot;no details&quot;), {creditCheckError: string(if error.message != null then error.message else &quot;no details&quot;)}) else null" />
         <zeebe:header key="retryBackoff" value="PT0S" />

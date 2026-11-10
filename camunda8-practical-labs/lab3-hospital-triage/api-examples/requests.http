@@ -4,7 +4,7 @@ GET http://localhost:8090/scheduling/api/v1/slots?department=GENERAL_MEDICINE&da
 ### No slots (dermatology is fully booked in the mock)
 GET http://localhost:8090/scheduling/api/v1/slots?department=DERMATOLOGY&date=2026-11-05&session=ANY
 
-### Booking (what the appointment.request-booking worker sends)
+### Booking (same request the *Book earliest slot* REST Connector sends)
 POST http://localhost:8090/scheduling/api/v1/bookings
 Content-Type: application/json
 

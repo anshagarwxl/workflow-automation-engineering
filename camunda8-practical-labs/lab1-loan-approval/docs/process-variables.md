@@ -36,6 +36,7 @@ Process `loan-approval-process`. "Set by" names the BPMN element that writes the
 
 | Variable | Type | Example | Purpose |
 |---|---|---|---|
+| `creditCheckResponse` | Context | `{status: 200, headers: {…}, body: {creditScore: 780, …}}` | full HTTP response (connector *Result variable*), as in the course tutorial |
 | `creditCheckStatus` | String | `COMPLETED` / `FAILED` | `FAILED` is set by the error boundary event output mapping |
 | `creditCheckError` | String | `Read timed out` | error message when the bureau call failed |
 | `creditAssessmentId` | String | `CBA-5001` | bureau reference |
